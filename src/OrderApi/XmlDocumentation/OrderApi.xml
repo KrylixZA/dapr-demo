@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OrderApi</name>
+    </assembly>
+    <members>
+        <member name="M:OrderApi.Managers.IOrderManager.CreateOrderAsync(OrderApi.Models.Order)">
+            <summary>
+            Attempts to persist the order to order store.
+            </summary>
+            <param name="order">The order details.</param>
+        </member>
+        <member name="M:OrderApi.Managers.IOrderManager.GetOrdersAsync">
+            <summary>
+            Gets a list of orders.
+            </summary>
+            <returns>The order list.</returns>
+        </member>
+        <member name="M:OrderApi.Managers.IOrderManager.GetOrderDetailsAsync(System.Guid)">
+            <summary>
+            Gets the details of a specific order.
+            </summary>
+            <param name="orderId">The order unique identifier.</param>
+            <returns>The order details.</returns>
+        </member>
+        <member name="M:OrderApi.Managers.OrderManager.CreateOrderAsync(OrderApi.Models.Order)">
+            <inheritdoc/>
+        </member>
+        <member name="M:OrderApi.Managers.OrderManager.GetOrdersAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:OrderApi.Managers.OrderManager.GetOrderDetailsAsync(System.Guid)">
+            <inheritdoc/>
+        </member>
+        <member name="M:OrderApi.Repositories.OrderRepository.CreateOrderAsync(OrderApi.Models.Order)">
+            <inheritdoc/>
+        </member>
+        <member name="M:OrderApi.Repositories.OrderRepository.GetOrdersAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:OrderApi.Repositories.OrderRepository.GetOrderDetailsAsync(System.Guid)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

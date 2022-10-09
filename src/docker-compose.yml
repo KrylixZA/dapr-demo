@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  orderapi:
+    image: ${DOCKER_REGISTRY-}orderapi
+    build:
+      context: .
+      dockerfile: OrderApi/Dockerfile
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Development
+    - ASPNETCORE_URLS=http://+:5000
+    ports:
+    - 5000:5000
+
+  orderapi-dapr:
+    image: daprio/daprd
+    command: ["./daprd",
+      "--app-id", "orderapi",
+      "--app-port", "5000",
+      "--placement-host-address", "placement:50006",
+      "--components-path", "/components"]
+    volumes:
+    - ./dapr/components/:/components
+    depends_on:
+    - orderapi
+    network_mode: "service:orderapi"
+
+  placement:
+    image: daprio/dapr
+    command: ["./placement", "--port", "50006"]
+    ports:
+    - 50006:50006
+
+  redis:
+    image: redis:6
+    ports:
+    - 6379:6379
