@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Xml.Linq;
+using Dapr.Actors;
+using Dapr.Actors.Client;
 using Dapr.Client;
+using Domain;
 using OrderApi.Models;
 
 namespace OrderApi.Repositories
@@ -24,7 +28,19 @@ namespace OrderApi.Repositories
         /// <inheritdoc/>
         public async Task CreateOrderAsync(Order order)
         {
+            Console.WriteLine($"Writing to order store for order: {order.OrderId}");
             await _daprClient.SaveStateAsync(ORDER_STORE, order.OrderId.ToString(), order);
+
+            Console.WriteLine($"Creating actor for order: {order.OrderId}");
+            var actorType = "MyActor";
+            var actorId = new ActorId("1");
+            var proxy = ActorProxy.Create<IMyActor>(actorId, actorType);
+            var response = await proxy.SetDataAsync(new MyData()
+            {
+                PropertyA = "ValueA",
+                PropertyB = "ValueB",
+            });
+            Console.WriteLine($"Got response from order actor: {response}");
         }
 
         /// <inheritdoc/>

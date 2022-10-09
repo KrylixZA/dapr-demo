@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OrderActor</name>
+    </assembly>
+    <members>
+        <member name="T:OrderActor.MyActor">
+            <summary>
+            Implements a contract for my test actor.
+            </summary>
+        </member>
+        <member name="M:OrderActor.MyActor.#ctor(Dapr.Actors.Runtime.ActorHost)">
+            <summary>
+            Initializes a new instance of MyActor
+            </summary>
+            <param name="host">The Dapr.Actors.Runtime.ActorHost that will host this actor instance.</param>
+        </member>
+        <member name="M:OrderActor.MyActor.OnActivateAsync">
+            <summary>
+            This method is called whenever an actor is activated.
+            An actor is activated the first time any of its methods are invoked.
+            </summary>
+        </member>
+        <member name="M:OrderActor.MyActor.OnDeactivateAsync">
+            <summary>
+            This method is called whenever an actor is deactivated after a period of inactivity.
+            </summary>
+        </member>
+        <member name="M:OrderActor.MyActor.SetDataAsync(Domain.MyData)">
+            <summary>
+            Set MyData into actor's private state store
+            </summary>
+            <param name="data">the user-defined MyData which will be stored into state store as "my_data" state</param>
+        </member>
+        <member name="M:OrderActor.MyActor.GetDataAsync">
+            <summary>
+            Get MyData from actor's private state store
+            </summary>
+            <return>the user-defined MyData which is stored into state store as "my_data" state</return>
+        </member>
+        <member name="M:OrderActor.MyActor.RegisterReminder">
+            <summary>
+            Register MyReminder reminder with the actor
+            </summary>
+        </member>
+        <member name="M:OrderActor.MyActor.UnregisterReminder">
+            <summary>
+            Unregister MyReminder reminder with the actor
+            </summary>
+        </member>
+        <member name="M:OrderActor.MyActor.ReceiveReminderAsync(System.String,System.Byte[],System.TimeSpan,System.TimeSpan)">
+            <summary>
+            Implement IRemindeable.ReceiveReminderAsync() which is call back invoked when an actor reminder is triggered.
+            </summary>
+        </member>
+        <member name="M:OrderActor.MyActor.RegisterTimer">
+            <summary>
+            Register MyTimer timer with the actor
+            </summary>
+        </member>
+        <member name="M:OrderActor.MyActor.UnregisterTimer">
+            <summary>
+            Unregister MyTimer timer with the actor
+            </summary>
+        </member>
+        <member name="M:OrderActor.MyActor.OnTimerCallBack(System.Byte[])">
+            <summary>
+            Timer callback once timer is expired
+            </summary>
+        </member>
+    </members>
+</doc>

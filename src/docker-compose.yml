@@ -43,5 +43,35 @@ services:
     networks:
     - dapr
 
+  orderactor:
+    image: orderactor:dev
+    build:
+      context: .
+      dockerfile: OrderActor/Dockerfile
+      tags:
+      - orderactor:dev
+    environment:
+    - ASPNETCORE_URLS=http://+:5000
+    depends_on:
+    - redis
+    networks:
+    - dapr
+
+  orderactor-dapr:
+    image: daprio/daprd
+    command: ["./daprd",
+      "--app-id", "orderapi",
+      "--app-port", "5000",
+      "--placement-host-address", "placement:50006",
+      "--components-path", "/components"]
+    volumes:
+    - ./dapr/components/:/components
+    depends_on:
+    - orderactor
+    - placement
+    network_mode: "service:orderactor"
+    networks:
+    - dapr
+
 networks:
   dapr: null

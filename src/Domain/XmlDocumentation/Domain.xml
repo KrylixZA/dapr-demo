@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Domain</name>
+    </assembly>
+    <members>
+        <member name="T:Domain.IMyActor">
+            <summary>
+            Defines a contract for my test actor.
+            </summary>
+        </member>
+        <member name="M:Domain.IMyActor.SetDataAsync(Domain.MyData)">
+            <summary>
+            Sets the data.
+            </summary>
+            <param name="data">The data.</param>
+        </member>
+        <member name="M:Domain.IMyActor.GetDataAsync">
+            <summary>
+            Gets the data.
+            </summary>
+        </member>
+        <member name="M:Domain.IMyActor.RegisterReminder">
+            <summary>
+            Registers a reminder.
+            </summary>
+        </member>
+        <member name="M:Domain.IMyActor.UnregisterReminder">
+            <summary>
+            Unregisters a reminder.
+            </summary>
+        </member>
+        <member name="M:Domain.IMyActor.RegisterTimer">
+            <summary>
+            Registers a timer.
+            </summary>
+        </member>
+        <member name="M:Domain.IMyActor.UnregisterTimer">
+            <summary>
+            Unregisters a timer.
+            </summary>
+        </member>
+        <member name="T:Domain.MyData">
+            <summary>
+            A model of the actor data.
+            </summary>
+        </member>
+        <member name="P:Domain.MyData.PropertyA">
+            <summary>
+            Property A.
+            </summary>
+        </member>
+        <member name="P:Domain.MyData.PropertyB">
+            <summary>
+            Property B
+            </summary>
+        </member>
+        <member name="M:Domain.MyData.ToString">
+            <summary>
+            Converts this instance to a friendly string.
+            </summary>
+        </member>
+    </members>
+</doc>
