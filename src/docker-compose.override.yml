@@ -1,13 +1,18 @@
-version: '3.4'
+version: '3'
 
 services:
+  placement:
+    command: ["./placement", "--port", "50006"]
+    ports:
+    - 50006:50006
+
+  redis:
+    ports:
+    - 6379:6379
+    
   orderapi:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+    - ASPNETCORE_ENVIRONMENT=Development
+    - ASPNETCORE_URLS=http://+:5000
     ports:
-      - "80"
-      - "443"
-    volumes:
-      - ~/.aspnet/https:/root/.aspnet/https:ro
-      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+    - 8000:5000

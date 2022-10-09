@@ -1,16 +1,31 @@
-version: '3.4'
+version: '3'
 
 services:
+  placement:
+    image: daprio/dapr
+    container_name: placement
+    networks:
+    - dapr
+
+  redis:
+    image: redis:6
+    container_name: redis
+    networks:
+    - dapr
+
   orderapi:
-    image: ${DOCKER_REGISTRY-}orderapi
+    image: orderapi:dev
     build:
       context: .
       dockerfile: OrderApi/Dockerfile
+      tags:
+      - orderapi:dev
     environment:
-    - ASPNETCORE_ENVIRONMENT=Development
     - ASPNETCORE_URLS=http://+:5000
-    ports:
-    - 5000:5000
+    depends_on:
+    - redis
+    networks:
+    - dapr
 
   orderapi-dapr:
     image: daprio/daprd
@@ -23,15 +38,10 @@ services:
     - ./dapr/components/:/components
     depends_on:
     - orderapi
+    - placement
     network_mode: "service:orderapi"
+    networks:
+    - dapr
 
-  placement:
-    image: daprio/dapr
-    command: ["./placement", "--port", "50006"]
-    ports:
-    - 50006:50006
-
-  redis:
-    image: redis:6
-    ports:
-    - 6379:6379
+networks:
+  dapr: null

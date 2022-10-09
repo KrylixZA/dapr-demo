@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace OrderApi.Controllers
         /// </summary>
         /// <param name="order">The details of the order.</param>
         [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody]Order order)
+        public async Task<IActionResult> CreateOrder([Required][FromBody]Order order)
         {
             await _orderManager.CreateOrderAsync(order);
             return Ok();

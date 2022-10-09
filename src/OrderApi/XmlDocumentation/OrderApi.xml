@@ -4,6 +4,39 @@
         <name>OrderApi</name>
     </assembly>
     <members>
+        <member name="T:OrderApi.Controllers.OrdersController">
+            <summary>
+            Provides a contract for interacting with orders in the state store.
+            </summary>
+        </member>
+        <member name="M:OrderApi.Controllers.OrdersController.#ctor(OrderApi.Managers.IOrderManager)">
+            <summary>
+            Instantiates a new instace of the orders controller class.
+            </summary>
+            <param name="orderManager">The order manager.</param>
+        </member>
+        <member name="M:OrderApi.Controllers.OrdersController.CreateOrder(OrderApi.Models.Order)">
+            <summary>
+            Persists a new order to the state storage.
+            </summary>
+            <param name="order">The details of the order.</param>
+        </member>
+        <member name="M:OrderApi.Controllers.OrdersController.GetOrders">
+            <summary>
+            Retries all the orders from the state storage.
+            </summary>
+        </member>
+        <member name="M:OrderApi.Controllers.OrdersController.GetOrderDetails(System.Guid)">
+            <summary>
+            Retries the details of a specific order based on the order identifier provided..
+            </summary>
+            <param name="orderId">The order identifier.</param>
+        </member>
+        <member name="T:OrderApi.Managers.IOrderManager">
+            <summary>
+            Defines a contract for managing orders.
+            </summary>
+        </member>
         <member name="M:OrderApi.Managers.IOrderManager.CreateOrderAsync(OrderApi.Models.Order)">
             <summary>
             Attempts to persist the order to order store.
@@ -23,6 +56,17 @@
             <param name="orderId">The order unique identifier.</param>
             <returns>The order details.</returns>
         </member>
+        <member name="T:OrderApi.Managers.OrderManager">
+            <summary>
+            Implements a contract for managing orders.
+            </summary>
+        </member>
+        <member name="M:OrderApi.Managers.OrderManager.#ctor(OrderApi.Repositories.IOrderRepository)">
+            <summary>
+            Instantiates a new instace of the order manager class.
+            </summary>
+            <param name="orderRepository">The order repository.</param>
+        </member>
         <member name="M:OrderApi.Managers.OrderManager.CreateOrderAsync(OrderApi.Models.Order)">
             <inheritdoc/>
         </member>
@@ -31,6 +75,85 @@
         </member>
         <member name="M:OrderApi.Managers.OrderManager.GetOrderDetailsAsync(System.Guid)">
             <inheritdoc/>
+        </member>
+        <member name="T:OrderApi.Models.Item">
+            <summary>
+            Defines an individual item.
+            </summary>
+        </member>
+        <member name="P:OrderApi.Models.Item.ItemId">
+            <summary>
+            The item unique identifier.
+            </summary>
+        </member>
+        <member name="P:OrderApi.Models.Item.ItemName">
+            <summary>
+            The name of the item.
+            </summary>
+        </member>
+        <member name="P:OrderApi.Models.Item.ItemDescription">
+            <summary>
+            The item description.
+            </summary>
+        </member>
+        <member name="P:OrderApi.Models.Item.Cost">
+            <summary>
+            The cost of the item.
+            </summary>
+        </member>
+        <member name="T:OrderApi.Models.Order">
+            <summary>
+            Defines an individual order.
+            </summary>
+        </member>
+        <member name="P:OrderApi.Models.Order.OrderId">
+            <summary>
+            The order unique identifier.
+            </summary>
+        </member>
+        <member name="P:OrderApi.Models.Order.OrderDateTime">
+            <summary>
+            The UTC date and time when the order was made.
+            </summary>
+        </member>
+        <member name="P:OrderApi.Models.Order.Items">
+            <summary>
+            The list of items ordered.
+            </summary>
+        </member>
+        <member name="T:OrderApi.Repositories.IOrderRepository">
+            <summary>
+            Defines a contract for interacting with order state.
+            </summary>
+        </member>
+        <member name="M:OrderApi.Repositories.IOrderRepository.CreateOrderAsync(OrderApi.Models.Order)">
+            <summary>
+            Persists an order to state.
+            </summary>
+            <param name="order">The details of the order.</param>
+        </member>
+        <member name="M:OrderApi.Repositories.IOrderRepository.GetOrdersAsync">
+            <summary>
+            Gets a list of all orders in the state.
+            </summary>
+            <returns>The list of orders.</returns>
+        </member>
+        <member name="M:OrderApi.Repositories.IOrderRepository.GetOrderDetailsAsync(System.Guid)">
+            <summary>
+            Returns the details of an order by a given identifier.
+            </summary>
+            <param name="orderId">The order identifier.</param>
+            <returns>The details of the order.</returns>
+        </member>
+        <member name="T:OrderApi.Repositories.OrderRepository">
+            <summary>
+            Implements a contract for interacting with order state.
+            </summary>
+        </member>
+        <member name="M:OrderApi.Repositories.OrderRepository.#ctor">
+            <summary>
+            Instantiates a new instance of the order repository class.
+            </summary>
         </member>
         <member name="M:OrderApi.Repositories.OrderRepository.CreateOrderAsync(OrderApi.Models.Order)">
             <inheritdoc/>
