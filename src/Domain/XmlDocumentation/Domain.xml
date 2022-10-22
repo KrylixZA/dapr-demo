@@ -4,60 +4,117 @@
         <name>Domain</name>
     </assembly>
     <members>
-        <member name="T:Domain.IMyActor">
+        <member name="T:Domain.Attributes.MustNotBeDefaultAttribute">
             <summary>
-            Defines a contract for my test actor.
+            A validation attribute to ensure a property is not default.
             </summary>
         </member>
-        <member name="M:Domain.IMyActor.SetDataAsync(Domain.MyData)">
+        <member name="M:Domain.Attributes.MustNotBeDefaultAttribute.#ctor">
             <summary>
-            Sets the data.
-            </summary>
-            <param name="data">The data.</param>
-        </member>
-        <member name="M:Domain.IMyActor.GetDataAsync">
-            <summary>
-            Gets the data.
+            Instantiates a new instance of the MustNotBeDefaultAttribute class.
             </summary>
         </member>
-        <member name="M:Domain.IMyActor.RegisterReminder">
+        <member name="M:Domain.Attributes.MustNotBeDefaultAttribute.IsValid(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="T:Domain.Constants.DaprComponents">
             <summary>
-            Registers a reminder.
+            A set of constants pointing to the dapr components.
             </summary>
         </member>
-        <member name="M:Domain.IMyActor.UnregisterReminder">
+        <member name="F:Domain.Constants.DaprComponents.OrderStateStore">
             <summary>
-            Unregisters a reminder.
+            The order state store component.
             </summary>
         </member>
-        <member name="M:Domain.IMyActor.RegisterTimer">
+        <member name="F:Domain.Constants.DaprComponents.OrderActorStateStore">
             <summary>
-            Registers a timer.
+            The order actor state store component.
             </summary>
         </member>
-        <member name="M:Domain.IMyActor.UnregisterTimer">
+        <member name="F:Domain.Constants.DaprComponents.PubSub">
             <summary>
-            Unregisters a timer.
+            The pubsub component. 
             </summary>
         </member>
-        <member name="T:Domain.MyData">
+        <member name="T:Domain.Enums.OrderState">
             <summary>
-            A model of the actor data.
+            A list of possible states that an order can be in.
             </summary>
         </member>
-        <member name="P:Domain.MyData.PropertyA">
+        <member name="F:Domain.Enums.OrderState.Created">
             <summary>
-            Property A.
+            The order has just been created.
             </summary>
         </member>
-        <member name="P:Domain.MyData.PropertyB">
+        <member name="F:Domain.Enums.OrderState.CheckOut">
             <summary>
-            Property B
+            The checkout process has begun.
             </summary>
         </member>
-        <member name="M:Domain.MyData.ToString">
+        <member name="F:Domain.Enums.OrderState.Complete">
             <summary>
-            Converts this instance to a friendly string.
+            The order has been processed to completion.
+            </summary>
+        </member>
+        <member name="F:Domain.Enums.OrderState.Abandoned">
+            <summary>
+            The order was abandoned by the user.
+            </summary>
+        </member>
+        <member name="F:Domain.Enums.OrderState.Errored">
+            <summary>
+            An error occured during processing.
+            </summary>
+        </member>
+        <member name="T:Domain.Models.Item">
+            <summary>
+            Defines an individual item.
+            </summary>
+        </member>
+        <member name="P:Domain.Models.Item.ItemId">
+            <summary>
+            The item unique identifier.
+            </summary>
+        </member>
+        <member name="P:Domain.Models.Item.ItemName">
+            <summary>
+            The name of the item.
+            </summary>
+        </member>
+        <member name="P:Domain.Models.Item.ItemDescription">
+            <summary>
+            The item description.
+            </summary>
+        </member>
+        <member name="P:Domain.Models.Item.Cost">
+            <summary>
+            The cost of the item. This must range from 1.00 to double max value.
+            </summary>
+        </member>
+        <member name="T:Domain.Models.Order">
+            <summary>
+            Defines an individual order.
+            </summary>
+        </member>
+        <member name="P:Domain.Models.Order.OrderId">
+            <summary>
+            The order unique identifier.
+            </summary>
+        </member>
+        <member name="P:Domain.Models.Order.OrderDateTimeUtc">
+            <summary>
+            The UTC date and time when the order was made.
+            </summary>
+        </member>
+        <member name="P:Domain.Models.Order.OrderState">
+            <summary>
+            The current state of the order.
+            </summary>
+        </member>
+        <member name="P:Domain.Models.Order.Items">
+            <summary>
+            The list of items ordered.
             </summary>
         </member>
     </members>

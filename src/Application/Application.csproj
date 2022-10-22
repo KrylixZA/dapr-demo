@@ -9,21 +9,29 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile>XmlDocumentation\Domain.xml</DocumentationFile>
+    <DocumentationFile>XmlDocumentation\Application.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DocumentationFile>XmlDocumentation\Domain.xml</DocumentationFile>
+    <DocumentationFile>XmlDocumentation\Application.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="XmlDocumentation\" />
-    <Folder Include="Enums\" />
-    <Folder Include="Models\" />
-    <Folder Include="Attributes\" />
-    <Folder Include="Constants\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Managers\" />
+    <Folder Include="Actors\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Constants\" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Actors\" />
+    <None Remove="Dapr.Client" />
+    <None Remove="Dapr.Actors" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Dapr.Client" Version="1.9.0" />
+    <PackageReference Include="Dapr.Actors" Version="1.9.0" />
   </ItemGroup>
 </Project>

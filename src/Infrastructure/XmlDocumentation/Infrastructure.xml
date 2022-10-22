@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Infrastructure</name>
+    </assembly>
+    <members>
+        <member name="T:Infrastructure.Actors.OrderActor">
+            <summary>
+            Implements a contract for my test actor.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.#ctor(Dapr.Actors.Runtime.ActorHost)">
+            <summary>
+            Initializes a new instance of MyActor
+            </summary>
+            <param name="host">The Dapr.Actors.Runtime.ActorHost that will host this actor instance.</param>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.CreateOrderAsync(Domain.Models.Order)">
+            <inheritdoc />
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.OnActivateAsync">
+            <summary>
+            This method is called whenever an actor is activated.
+            An actor is activated the first time any of its methods are invoked.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.OnDeactivateAsync">
+            <summary>
+            This method is called whenever an actor is deactivated after a period of inactivity.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.RegisterReminder">
+            <summary>
+            Register MyReminder reminder with the actor
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.UnregisterReminder">
+            <summary>
+            Unregister MyReminder reminder with the actor
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.ReceiveReminderAsync(System.String,System.Byte[],System.TimeSpan,System.TimeSpan)">
+            <summary>
+            Implement IRemindeable.ReceiveReminderAsync() which is call back invoked when an actor reminder is triggered.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.RegisterTimer">
+            <summary>
+            Register MyTimer timer with the actor
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.UnregisterTimer">
+            <summary>
+            Unregister MyTimer timer with the actor
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.OnTimerCallBack(System.Byte[])">
+            <summary>
+            Timer callback once timer is expired
+            </summary>
+        </member>
+        <member name="T:Infrastructure.Managers.OrderManager">
+            <summary>
+            Implements a contract for managing orders.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Managers.OrderManager.#ctor(Application.Repositories.IOrderRepository)">
+            <summary>
+            Instantiates a new instace of the order manager class.
+            </summary>
+            <param name="orderRepository">The order repository.</param>
+        </member>
+        <member name="M:Infrastructure.Managers.OrderManager.CreateOrderAsync(Domain.Models.Order)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Infrastructure.Managers.OrderManager.CheckoutOrderAsync(System.Guid)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Infrastructure.Repositories.OrderRepository">
+            <summary>
+            Implements a contract for interacting with order state.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Repositories.OrderRepository.#ctor">
+            <summary>
+            Instantiates a new instance of the order repository class.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Repositories.OrderRepository.CreateOrderAsync(Domain.Models.Order)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

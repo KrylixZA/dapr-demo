@@ -9,18 +9,14 @@ services:
   redis:
     ports:
     - 6379:6379
+
+  rabbitmq:
+    ports:
+    - 5672:5672
+    - 15672:15672
     
   orderapi:
     environment:
     - ASPNETCORE_ENVIRONMENT=Development
-    - ASPNETCORE_URLS=http://+:5000
     ports:
     - 8000:5000
-
-  orderactor:
-    environment:
-    - ASPNETCORE_ENVIRONMENT=Development
-    - ASPNETCORE_URLS=http://+:5000
-    ports:
-    - 9000:5000
-

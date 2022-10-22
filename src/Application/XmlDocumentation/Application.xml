@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Application</name>
+    </assembly>
+    <members>
+        <member name="T:Application.Actors.IOrderActor">
+            <summary>
+            Defines a contract for representing an order 
+            </summary>
+        </member>
+        <member name="M:Application.Actors.IOrderActor.CreateOrderAsync(Domain.Models.Order)">
+            <summary>
+            Creates an actor that represents the order.
+            </summary>
+            <param name="order">The details of the order.</param>
+        </member>
+        <member name="T:Application.Managers.IOrderManager">
+            <summary>
+            Defines a contract for managing orders.
+            </summary>
+        </member>
+        <member name="M:Application.Managers.IOrderManager.CreateOrderAsync(Domain.Models.Order)">
+            <summary>
+            Attempts to persist the order to order store.
+            </summary>
+            <param name="order">The order details.</param>
+        </member>
+        <member name="M:Application.Managers.IOrderManager.CheckoutOrderAsync(System.Guid)">
+            <summary>
+            Begins the checkout process for order.
+            </summary>
+            <remarks>
+            An order is represented by an actor. T
+            </remarks>
+            <param name="orderId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Application.Repositories.IOrderRepository">
+            <summary>
+            Defines a contract for interacting with order state.
+            </summary>
+        </member>
+        <member name="M:Application.Repositories.IOrderRepository.CreateOrderAsync(Domain.Models.Order)">
+            <summary>
+            Persists an order to state.
+            </summary>
+            <param name="order">The details of the order.</param>
+        </member>
+    </members>
+</doc>
