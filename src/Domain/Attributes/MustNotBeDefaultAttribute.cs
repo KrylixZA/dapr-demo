@@ -21,7 +21,10 @@ public class MustNotBeDefaultAttribute : ValidationAttribute
   public override bool IsValid(object? value)
   {
     if (value is null)
-      return true; //You can flip this if you want. I wanted leave the responsability of null to RequiredAttribute
+    {
+      return false;
+    }
+
     var type = value.GetType();
     return !Equals(value, Activator.CreateInstance(Nullable.GetUnderlyingType(type) ?? type));
   }

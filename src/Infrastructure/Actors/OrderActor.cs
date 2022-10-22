@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Xml.Linq;
 using Application.Actors;
+using Application.Repositories;
 using Dapr.Actors.Runtime;
 using Domain;
 using Domain.Constants;
+using Domain.Enums;
+using Domain.Exceptions;
 using Domain.Models;
 
 namespace Infrastructure.Actors;
@@ -13,6 +16,14 @@ namespace Infrastructure.Actors;
 /// </summary>
 public class OrderActor : Actor, IOrderActor, IRemindable
 {
+  private readonly IOrderStateRepository _orderStateRepository;
+  private readonly IOrderPubSubRepository _orderPubSubRepository;
+
+  /// <summary>
+  /// The actor type.
+  /// </summary>
+  public static string ActorType => nameof(OrderActor);
+
   // The constructor must accept ActorHost as a parameter, and can also accept additional
   // parameters that will be retrieved from the dependency injection container
   //
@@ -20,19 +31,51 @@ public class OrderActor : Actor, IOrderActor, IRemindable
   /// Initializes a new instance of MyActor
   /// </summary>
   /// <param name="host">The Dapr.Actors.Runtime.ActorHost that will host this actor instance.</param>
-  public OrderActor(ActorHost host)
+  /// <param name="orderStateRepository">The order state repository.</param>
+  /// <param name="orderPubSubRepository">The order pub/sub repository.</param>
+  public OrderActor(
+    ActorHost host,
+    IOrderStateRepository orderStateRepository,
+    IOrderPubSubRepository orderPubSubRepository)
       : base(host)
   {
+    _orderStateRepository = orderStateRepository;
+    _orderPubSubRepository = orderPubSubRepository;
   }
 
   /// <inheritdoc />
   public async Task CreateOrderAsync(Order order)
   {
-    await this.StateManager.SetStateAsync<Order>(
+    await Task.WhenAll(
+      _orderStateRepository.CreateOrderAsync(order),
+      StateManager.SetStateAsync<Order>(
         DaprComponents.OrderActorStateStore,  // state name
-        order);                               // actor state
+        order)                                // actor state
+      );
   }
 
+  /// <inheritdoc />
+  public async Task CheckoutOrderAsync(Guid orderId)
+  {
+    var order = await _orderStateRepository.GetOrderAsync(orderId);
+    if (order is null)
+    {
+      throw new OrderNotFoundException();
+    }
+
+    order.OrderUpdatedDateTimeUtc = DateTime.UtcNow;
+    order.OrderState = OrderState.CheckOut;
+
+    await Task.WhenAll(
+      _orderStateRepository.CheckoutOrderAsync(order),
+      _orderPubSubRepository.PublishOrderForCheckoutAsync(order),
+      StateManager.SetStateAsync<Order>(
+        DaprComponents.OrderActorStateStore,  // state name
+        order)                                // actor state
+      );
+  }
+
+  #region demo code
   /// <summary>
   /// This method is called whenever an actor is activated.
   /// An actor is activated the first time any of its methods are invoked.
@@ -114,4 +157,5 @@ public class OrderActor : Actor, IOrderActor, IRemindable
     Console.WriteLine("OnTimerCallBack is called!");
     return Task.CompletedTask;
   }
+  #endregion
 }

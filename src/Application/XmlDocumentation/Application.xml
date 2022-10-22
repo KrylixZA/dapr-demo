@@ -13,7 +13,14 @@
             <summary>
             Creates an actor that represents the order.
             </summary>
-            <param name="order">The details of the order.</param>
+            <param name="newOrder">The details of the order.</param>
+        </member>
+        <member name="M:Application.Actors.IOrderActor.CheckoutOrderAsync(System.Guid)">
+            <summary>
+            Begins the checkout process for an order.
+            This will update the order state and the updated date time field.
+            </summary>
+            <param name="orderId">The order unique identifier.</param>
         </member>
         <member name="T:Application.Managers.IOrderManager">
             <summary>
@@ -36,16 +43,41 @@
             <param name="orderId"></param>
             <returns></returns>
         </member>
-        <member name="T:Application.Repositories.IOrderRepository">
+        <member name="T:Application.Repositories.IOrderPubSubRepository">
             <summary>
-            Defines a contract for interacting with order state.
+            Defines a contract for interacting with order pub/sub resources.
             </summary>
         </member>
-        <member name="M:Application.Repositories.IOrderRepository.CreateOrderAsync(Domain.Models.Order)">
+        <member name="M:Application.Repositories.IOrderPubSubRepository.PublishOrderForCheckoutAsync(Domain.Models.Order)">
+            <summary>
+            Publishes a messages to the "orders" queue with the details of the order to checkout.
+            </summary>
+            <param name="order">The order.</param>
+        </member>
+        <member name="T:Application.Repositories.IOrderStateRepository">
+            <summary>
+            Defines a contract for interacting with order state resources.
+            </summary>
+        </member>
+        <member name="M:Application.Repositories.IOrderStateRepository.CreateOrderAsync(Domain.Models.Order)">
             <summary>
             Persists an order to state.
             </summary>
             <param name="order">The details of the order.</param>
+        </member>
+        <member name="M:Application.Repositories.IOrderStateRepository.GetOrderAsync(System.Guid)">
+            <summary>
+            Attemps to find the order. If nothing is found, null will be returned.
+            </summary>
+            <param name="orderId">The order identifier.</param>
+            <returns>The order details. Null if not found.</returns>
+        </member>
+        <member name="M:Application.Repositories.IOrderStateRepository.CheckoutOrderAsync(Domain.Models.Order)">
+            <summary>
+            Begins the checkout process for an order.
+            This will update the order state and the updated date time field.
+            </summary>
+            <param name="updatedOrder">The updated order.</param>
         </member>
     </members>
 </doc>

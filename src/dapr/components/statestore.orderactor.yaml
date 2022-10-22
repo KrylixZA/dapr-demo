@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: orderactorstate
+  name: orderactors
 spec:
   type: state.redis
   metadata:

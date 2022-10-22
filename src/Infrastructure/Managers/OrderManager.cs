@@ -1,7 +1,11 @@
 ﻿using System;
+using Application.Actors;
 using Application.Managers;
 using Application.Repositories;
+using Dapr.Actors;
+using Dapr.Actors.Client;
 using Domain.Models;
+using Infrastructure.Actors;
 
 namespace Infrastructure.Managers;
 
@@ -10,26 +14,19 @@ namespace Infrastructure.Managers;
 /// </summary>
 public class OrderManager : IOrderManager
 {
-  private readonly IOrderRepository _orderRepository;
-
-  /// <summary>
-  /// Instantiates a new instace of the order manager class.
-  /// </summary>
-  /// <param name="orderRepository">The order repository.</param>
-  public OrderManager(IOrderRepository orderRepository)
-  {
-    _orderRepository = orderRepository;
-  }
-
   /// <inheritdoc/>
   public async Task CreateOrderAsync(Order order)
   {
-    await _orderRepository.CreateOrderAsync(order);
+    var actorId = new ActorId(order.OrderId.ToString());
+    var orderActor = ActorProxy.Create<IOrderActor>(actorId, OrderActor.ActorType);
+    await orderActor.CreateOrderAsync(order);
   }
 
   /// <inheritdoc/>
-  public Task CheckoutOrderAsync(Guid orderId)
+  public async Task CheckoutOrderAsync(Guid orderId)
   {
-    throw new NotImplementedException();
+    var actorId = new ActorId(orderId.ToString());
+    var orderActor = ActorProxy.Create<IOrderActor>(actorId, OrderActor.ActorType);
+    await orderActor.CheckoutOrderAsync(orderId);
   }
 }

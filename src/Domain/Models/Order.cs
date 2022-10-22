@@ -25,8 +25,14 @@ public class Order
   /// </summary>
   [Required]
   [MustNotBeDefault]
-  [JsonPropertyName("orderDateTimeUtc")]
-  public DateTime OrderDateTimeUtc { get; set; } = DateTime.UtcNow;
+  [JsonPropertyName("orderCreatedDateTimeUtc")]
+  public DateTime OrderCreatedDateTimeUtc { get; set; } = DateTime.UtcNow;
+
+  /// <summary>
+  /// The UTC date and time when the order was updated.
+  /// </summary>
+  [JsonPropertyName("orderUpdatedDateTimeUtc")]
+  public DateTime? OrderUpdatedDateTimeUtc { get; set; }
 
   /// <summary>
   /// The current state of the order.

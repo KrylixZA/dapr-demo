@@ -1,8 +1,10 @@
-﻿using Application.Managers;
+﻿using System.Reflection;
+using Application.Managers;
 using Application.Repositories;
 using Infrastructure.Actors;
 using Infrastructure.Managers;
 using Infrastructure.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+  c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+  {
+    Title = "Order API",
+    Version = "v1",
+    Description = "A demo API for interacting with various Dapr building blocks while processing orders."
+  });
+
+  var apiXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+  var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXmlFile);
+  c.IncludeXmlComments(apiXmlPath);
+  c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Application.xml"));
+  c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Domain.xml"));
+  c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Infrastructure.xml"));
+});
 builder.Services.AddActors(options =>
 {
   // Register actor types and configure actor settings
@@ -20,7 +37,8 @@ builder.Services.AddDaprClient();
 
 // Dependency injection
 builder.Services.AddTransient<IOrderManager, OrderManager>();
-builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+builder.Services.AddTransient<IOrderStateRepository, OrderStateRepository>();
+builder.Services.AddTransient<IOrderPubSubRepository, OrderPubSubRepository>();
 
 var app = builder.Build();
 
@@ -31,8 +49,8 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
+app.MapActorsHandlers();
 app.UseRouting();
 app.MapControllers();
-app.MapActorsHandlers();
 app.Run();
 

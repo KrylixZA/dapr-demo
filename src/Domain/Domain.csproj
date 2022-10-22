@@ -21,9 +21,11 @@
     <Folder Include="Models\" />
     <Folder Include="Attributes\" />
     <Folder Include="Constants\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Constants\" />
+    <None Remove="Exceptions\" />
   </ItemGroup>
 </Project>

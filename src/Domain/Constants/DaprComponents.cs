@@ -13,7 +13,7 @@ public static class DaprComponents
   /// <summary>
   /// The order actor state store component.
   /// </summary>
-  public const string OrderActorStateStore = "orderactorstate";
+  public const string OrderActorStateStore = "orderactors";
 
   /// <summary>
   /// The pubsub component. 

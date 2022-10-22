@@ -9,13 +9,23 @@
             Implements a contract for my test actor.
             </summary>
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.#ctor(Dapr.Actors.Runtime.ActorHost)">
+        <member name="P:Infrastructure.Actors.OrderActor.ActorType">
+            <summary>
+            The actor type.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.#ctor(Dapr.Actors.Runtime.ActorHost,Application.Repositories.IOrderStateRepository,Application.Repositories.IOrderPubSubRepository)">
             <summary>
             Initializes a new instance of MyActor
             </summary>
             <param name="host">The Dapr.Actors.Runtime.ActorHost that will host this actor instance.</param>
+            <param name="orderStateRepository">The order state repository.</param>
+            <param name="orderPubSubRepository">The order pub/sub repository.</param>
         </member>
         <member name="M:Infrastructure.Actors.OrderActor.CreateOrderAsync(Domain.Models.Order)">
+            <inheritdoc />
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActor.CheckoutOrderAsync(System.Guid)">
             <inheritdoc />
         </member>
         <member name="M:Infrastructure.Actors.OrderActor.OnActivateAsync">
@@ -64,29 +74,42 @@
             Implements a contract for managing orders.
             </summary>
         </member>
-        <member name="M:Infrastructure.Managers.OrderManager.#ctor(Application.Repositories.IOrderRepository)">
-            <summary>
-            Instantiates a new instace of the order manager class.
-            </summary>
-            <param name="orderRepository">The order repository.</param>
-        </member>
         <member name="M:Infrastructure.Managers.OrderManager.CreateOrderAsync(Domain.Models.Order)">
             <inheritdoc/>
         </member>
         <member name="M:Infrastructure.Managers.OrderManager.CheckoutOrderAsync(System.Guid)">
             <inheritdoc/>
         </member>
-        <member name="T:Infrastructure.Repositories.OrderRepository">
+        <member name="T:Infrastructure.Repositories.OrderPubSubRepository">
             <summary>
-            Implements a contract for interacting with order state.
+            Implements a contract for interacting with order pub/sub resources.
             </summary>
         </member>
-        <member name="M:Infrastructure.Repositories.OrderRepository.#ctor">
+        <member name="M:Infrastructure.Repositories.OrderPubSubRepository.#ctor">
             <summary>
-            Instantiates a new instance of the order repository class.
+            Instantiates a new instance of the order pub/sub repository class.
             </summary>
         </member>
-        <member name="M:Infrastructure.Repositories.OrderRepository.CreateOrderAsync(Domain.Models.Order)">
+        <member name="M:Infrastructure.Repositories.OrderPubSubRepository.PublishOrderForCheckoutAsync(Domain.Models.Order)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Infrastructure.Repositories.OrderStateRepository">
+            <summary>
+            Implements a contract for interacting with order state resources.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Repositories.OrderStateRepository.#ctor">
+            <summary>
+            Instantiates a new instance of the order state repository class.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Repositories.OrderStateRepository.CreateOrderAsync(Domain.Models.Order)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Infrastructure.Repositories.OrderStateRepository.GetOrderAsync(System.Guid)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Infrastructure.Repositories.OrderStateRepository.CheckoutOrderAsync(Domain.Models.Order)">
             <inheritdoc/>
         </member>
     </members>

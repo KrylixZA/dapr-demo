@@ -31,7 +31,6 @@
     <None Remove="Dapr.Actors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dapr.Client" Version="1.9.0" />
     <PackageReference Include="Dapr.Actors" Version="1.9.0" />
   </ItemGroup>
 </Project>
