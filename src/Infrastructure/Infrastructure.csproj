@@ -21,6 +21,7 @@
     <Folder Include="Repositories\" />
     <Folder Include="Managers\" />
     <Folder Include="Actors\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,10 +33,16 @@
     <None Remove="Microsoft.Extensions.Configuration.UserSecrets" />
     <None Remove="Dapr.Client" />
     <None Remove="Actors\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapr.Actors" Version="1.9.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Dapr.Client" Version="1.9.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Helpers\AesEncryptionHelper.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 </Project>

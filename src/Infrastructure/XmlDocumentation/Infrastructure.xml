@@ -69,6 +69,19 @@
             Timer callback once timer is expired
             </summary>
         </member>
+        <member name="T:Infrastructure.Helpers.AesEncryptionHelper">
+            <summary>
+            Implements a contract to help with AES symmetric encryption.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Helpers.AesEncryptionHelper.#ctor">
+            <summary>
+            Instantiates a new instance of the AesEncryptionHelper class.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.Helpers.AesEncryptionHelper.EncryptStringAsync(System.String)">
+            <inheritdoc />
+        </member>
         <member name="T:Infrastructure.Managers.OrderManager">
             <summary>
             Implements a contract for managing orders.
@@ -85,10 +98,11 @@
             Implements a contract for interacting with order pub/sub resources.
             </summary>
         </member>
-        <member name="M:Infrastructure.Repositories.OrderPubSubRepository.#ctor">
+        <member name="M:Infrastructure.Repositories.OrderPubSubRepository.#ctor(Application.Helpers.IAesEncryptionHelper)">
             <summary>
             Instantiates a new instance of the order pub/sub repository class.
             </summary>
+            <param name="aesEncryptionHelper">The AES encryption helper.</param>
         </member>
         <member name="M:Infrastructure.Repositories.OrderPubSubRepository.PublishOrderForCheckoutAsync(Domain.Models.Order)">
             <inheritdoc/>

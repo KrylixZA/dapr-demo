@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
+using Application.Helpers;
 using Application.Managers;
 using Application.Repositories;
 using Infrastructure.Actors;
+using Infrastructure.Helpers;
 using Infrastructure.Managers;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,8 +39,9 @@ builder.Services.AddDaprClient();
 
 // Dependency injection
 builder.Services.AddTransient<IOrderManager, OrderManager>();
-builder.Services.AddTransient<IOrderStateRepository, OrderStateRepository>();
+builder.Services.AddTransient<IAesEncryptionHelper, AesEncryptionHelper>();
 builder.Services.AddTransient<IOrderPubSubRepository, OrderPubSubRepository>();
+builder.Services.AddTransient<IOrderStateRepository, OrderStateRepository>();
 
 var app = builder.Build();
 

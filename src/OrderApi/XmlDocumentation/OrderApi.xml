@@ -34,7 +34,7 @@
             Because an order is represented by a virtual actor, this will initiate the following changes:
             1. The order updated date time UTC field will be set with the current UTC time.
             2. The actor state for the order will be updated.
-            3. A message will be published to a "checkout" queue in RabbitMQ.
+            3. A message will be published to a "checkout" exchange in RabbitMQ.
             </remarks>
             <param name="orderId">The order unique identifier.</param>
         </member>
