@@ -6,11 +6,11 @@ using Infrastructure.Actors;
 using Infrastructure.Helpers;
 using Infrastructure.Managers;
 using Infrastructure.Repositories;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<ActorConfig>(builder.Configuration.GetSection(nameof(ActorConfig)));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -34,6 +34,15 @@ builder.Services.AddActors(options =>
 {
   // Register actor types and configure actor settings
   options.Actors.RegisterActor<OrderActor>();
+
+  // Setup actor config
+  var actorConfig = builder.Configuration.GetSection(nameof(ActorConfig)).Get<ActorConfig>();
+  options.ActorIdleTimeout = TimeSpan.FromMinutes(actorConfig.ActorIdleTimeout);
+  options.ActorScanInterval = TimeSpan.FromSeconds(actorConfig.ActorScanInterval);
+  options.DrainOngoingCallTimeout = TimeSpan.FromSeconds(actorConfig.DrainOngoingCallTimeout);
+  options.DrainRebalancedActors = actorConfig.DrainRebalancedActors;
+  options.RemindersStoragePartitions = actorConfig.RemindersStoragePartitions;
+  options.ReentrancyConfig = actorConfig.ReentrancyConfig;
 });
 builder.Services.AddDaprClient();
 
