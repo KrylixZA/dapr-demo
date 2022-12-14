@@ -6,14 +6,14 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["OrderApi/OrderApi.csproj", "OrderApi/"]
-RUN dotnet restore "OrderApi/OrderApi.csproj"
+COPY ["../GarbageCollector/GarbageCollector.csproj", "../GarbageCollector/"]
+RUN dotnet restore "../GarbageCollector/GarbageCollector.csproj"
 COPY . .
-WORKDIR "/src/OrderApi"
-RUN dotnet build "OrderApi.csproj" -c Release -o /app/build
+WORKDIR "/src/../GarbageCollector"
+RUN dotnet build "GarbageCollector.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "OrderApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "GarbageCollector.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
@@ -21,4 +21,4 @@ COPY --from=publish /app/publish .
 
 EXPOSE 5000
 ENV ASPNETCORE_URLS=http://+:5000
-ENTRYPOINT ["dotnet", "OrderApi.dll"]
+ENTRYPOINT ["dotnet", "GarbageCollector.dll"]

@@ -6,16 +6,17 @@
     <members>
         <member name="T:OrderApi.Controllers.OrdersController">
             <summary>
-            Provides a contract for interacting with orders in the state store.
+            Exposes endpoints for interacting with orders in the state store.
             </summary>
         </member>
-        <member name="M:OrderApi.Controllers.OrdersController.#ctor(Application.Managers.IOrderManager)">
+        <member name="M:OrderApi.Controllers.OrdersController.#ctor(OrderApi.Managers.IOrderManager,Microsoft.Extensions.Logging.ILogger{OrderApi.Controllers.OrdersController})">
             <summary>
             Instantiates a new instace of the orders controller class.
             </summary>
             <param name="orderManager">The order manager.</param>
+            <param name="logger">The logger.</param>
         </member>
-        <member name="M:OrderApi.Controllers.OrdersController.CreateOrder(Domain.Models.Order)">
+        <member name="M:OrderApi.Controllers.OrdersController.CreateOrderAsync(Domain.Models.Order)">
             <summary>
             Persists a new order to the state storage.
             </summary>
@@ -26,9 +27,21 @@
             </remarks>
             <param name="order">The details of the order.</param>
         </member>
-        <member name="M:OrderApi.Controllers.OrdersController.CheckoutOrder(System.Guid)">
+        <member name="M:OrderApi.Controllers.OrdersController.CheckoutOrderAsync(System.Guid)">
             <summary>
             Begins the checkout process for an order.
+            </summary>
+            <remarks>
+            Because an order is represented by a virtual actor, this will initiate the following changes:
+            1. The order updated date time UTC field will be set with the current UTC time.
+            2. The actor state for the order will be updated.
+            3. A message will be published to a "events" exchange in RabbitMQ.
+            </remarks>
+            <param name="orderId">The order unique identifier.</param>
+        </member>
+        <member name="M:OrderApi.Controllers.OrdersController.CompleteOrderAsync(System.Guid)">
+            <summary>
+            Completes an order.
             </summary>
             <remarks>
             Because an order is represented by a virtual actor, this will initiate the following changes:
@@ -37,6 +50,49 @@
             3. A message will be published to a "checkout" exchange in RabbitMQ.
             </remarks>
             <param name="orderId">The order unique identifier.</param>
+        </member>
+        <member name="T:OrderApi.Managers.IOrderManager">
+            <summary>
+            Defines a contract for managing orders.
+            </summary>
+        </member>
+        <member name="M:OrderApi.Managers.IOrderManager.CreateOrderAsync(Domain.Models.Order)">
+            <summary>
+            Attempts to persist the order to order store.
+            </summary>
+            <param name="order">The order details.</param>
+        </member>
+        <member name="M:OrderApi.Managers.IOrderManager.CheckoutOrderAsync(System.Guid)">
+            <summary>
+            Begins the checkout process for order.
+            </summary>
+            <param name="orderId">The order identifier.</param>
+        </member>
+        <member name="M:OrderApi.Managers.IOrderManager.CompleteOrderAsync(System.Guid)">
+            <summary>
+            Completes an order.
+            </summary>
+            <param name="orderId">The order identifier.</param>
+        </member>
+        <member name="T:OrderApi.Managers.OrderManager">
+            <summary>
+            Implements a contract for managing orders.
+            </summary>
+        </member>
+        <member name="M:OrderApi.Managers.OrderManager.#ctor(Microsoft.Extensions.Logging.ILogger{OrderApi.Managers.OrderManager})">
+            <summary>
+            Instantiates a new instance of the OrderManager class.
+            </summary>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:OrderApi.Managers.OrderManager.CreateOrderAsync(Domain.Models.Order)">
+            <inheritdoc/>
+        </member>
+        <member name="M:OrderApi.Managers.OrderManager.CheckoutOrderAsync(System.Guid)">
+            <inheritdoc/>
+        </member>
+        <member name="M:OrderApi.Managers.OrderManager.CompleteOrderAsync(System.Guid)">
+            <inheritdoc/>
         </member>
     </members>
 </doc>

@@ -28,10 +28,10 @@ public class OrderPubSubRepository : IOrderPubSubRepository
   /// <inheritdoc/>
   public async Task PublishOrderEvent(Order order)
   {
-    var encryptedPayload = await _aesEncryptionHelper.EncryptStringAsync(JsonSerializer.Serialize(order));
-    await _daprClient.PublishEventAsync<string>(
+    var encryptedPayload = await _aesEncryptionHelper.EncryptObjectAsync(order);
+    await _daprClient.PublishEventAsync(
       DaprComponents.PubSub,
-      "checkout",
+      "order-events",
       encryptedPayload);
   }
 }

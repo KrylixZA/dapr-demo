@@ -20,3 +20,9 @@ services:
     - ASPNETCORE_ENVIRONMENT=Development
     ports:
     - 8000:5000
+
+  garbagecollector:
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+    - 8001:5000

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Xml.Linq;
-using Application.Actors;
-using Application.Repositories;
-using Dapr.Actors;
-using Dapr.Actors.Client;
+﻿using Application.Repositories;
 using Dapr.Client;
-using Domain;
 using Domain.Constants;
 using Domain.Models;
 
@@ -27,12 +21,12 @@ public class OrderStateRepository : IOrderStateRepository
   }
 
   /// <inheritdoc/>
-  public async Task CreateOrderAsync(Order newOrder)
+  public async Task SaveOrderAsync(Order order)
   {
     await _daprClient.SaveStateAsync(
       DaprComponents.OrderStateStore,
-      newOrder.OrderId.ToString(),
-      newOrder);
+      order.OrderId.ToString(),
+      order);
   }
 
   /// <inheritdoc/>
@@ -41,14 +35,5 @@ public class OrderStateRepository : IOrderStateRepository
     return await _daprClient.GetStateAsync<Order?>(
       DaprComponents.OrderStateStore,
       orderId.ToString());
-  }
-
-  /// <inheritdoc/>
-  public async Task CheckoutOrderAsync(Order updatedOrder)
-  {
-    await _daprClient.SaveStateAsync(
-      DaprComponents.OrderStateStore,
-      updatedOrder.OrderId.ToString(),
-      updatedOrder);
   }
 }

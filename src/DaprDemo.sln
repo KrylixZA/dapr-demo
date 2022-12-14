@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{D237937C-6EEF-4083-A8ED-49A25710FD2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarbageCollector", "GarbageCollector\GarbageCollector.csproj", "{EA3F7ED4-0390-4959-BB59-EB683D2B0FAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D237937C-6EEF-4083-A8ED-49A25710FD2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D237937C-6EEF-4083-A8ED-49A25710FD2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D237937C-6EEF-4083-A8ED-49A25710FD2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA3F7ED4-0390-4959-BB59-EB683D2B0FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA3F7ED4-0390-4959-BB59-EB683D2B0FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA3F7ED4-0390-4959-BB59-EB683D2B0FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA3F7ED4-0390-4959-BB59-EB683D2B0FAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

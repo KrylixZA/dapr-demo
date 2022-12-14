@@ -38,21 +38,30 @@
             Provides a contract to help with AES symmetric encryption.
             </summary>
         </member>
-        <member name="M:Application.Helpers.IAesEncryptionHelper.EncryptStringAsync(System.String)">
+        <member name="M:Application.Helpers.IAesEncryptionHelper.EncryptObjectAsync``1(``0)">
             <summary>
-            Uses symmetric AES encryption to encrypt a string.
+            Uses symmetric AES encryption to encrypt an object.
             </summary>
-            <param name="stringToEncrypt">The string to encrypt.</param>
+            <param name="objectToEncrypt">The object to encrypt. This will be converted to a JSON object before encryption.</param>
+            <typeparam name="T">The type of class to encrypt.</typeparam>
             <returns>The encrypted representation of the string.</returns>
+        </member>
+        <member name="M:Application.Helpers.IAesEncryptionHelper.DecryptToObjectAsync``1(System.String)">
+            <summary>
+            Uses symmetric AES encryption to decrypt a string to an object.
+            </summary>
+            <param name="stringToDecrypt">The string to decrypt.</param>
+            <typeparam name="T">The type of class to return after decryption.</typeparam>
+            <returns>If possible, the class representation of the encrypted string.</returns>
         </member>
         <member name="T:Application.Repositories.IOrderPubSubRepository">
             <summary>
             Defines a contract for interacting with order pub/sub resources.
             </summary>
         </member>
-        <member name="M:Application.Repositories.IOrderPubSubRepository.PublishOrderForCheckoutAsync(Domain.Models.Order)">
+        <member name="M:Application.Repositories.IOrderPubSubRepository.PublishOrderEvent(Domain.Models.Order)">
             <summary>
-            Publishes a messages to the "orders" queue with the details of the order to checkout.
+            Publishes a messages to the "orders" queue with the event details for the order.
             </summary>
             <param name="order">The order.</param>
         </member>
@@ -61,7 +70,7 @@
             Defines a contract for interacting with order state resources.
             </summary>
         </member>
-        <member name="M:Application.Repositories.IOrderStateRepository.CreateOrderAsync(Domain.Models.Order)">
+        <member name="M:Application.Repositories.IOrderStateRepository.SaveOrderAsync(Domain.Models.Order)">
             <summary>
             Persists an order to state.
             </summary>
@@ -73,13 +82,6 @@
             </summary>
             <param name="orderId">The order identifier.</param>
             <returns>The order details. Null if not found.</returns>
-        </member>
-        <member name="M:Application.Repositories.IOrderStateRepository.CheckoutOrderAsync(Domain.Models.Order)">
-            <summary>
-            Begins the checkout process for an order.
-            This will update the order state and the updated date time field.
-            </summary>
-            <param name="updatedOrder">The updated order.</param>
         </member>
     </members>
 </doc>

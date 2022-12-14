@@ -10,8 +10,9 @@ using Microsoft.Extensions.Logging;
 namespace Infrastructure.Actors;
 
 /// <summary>
-/// Implements a contract for my test actor.
+/// Represents an order as a virtual actor.
 /// </summary>
+[Actor(TypeName = nameof(OrderActor))]
 public class OrderActor : Actor, IOrderActor
 {
   private readonly IOrderStateRepository _orderStateRepository;
@@ -22,11 +23,8 @@ public class OrderActor : Actor, IOrderActor
   /// </summary>
   public static string ActorType => nameof(OrderActor);
 
-  // The constructor must accept ActorHost as a parameter, and can also accept additional
-  // parameters that will be retrieved from the dependency injection container
-  //
   /// <summary>
-  /// Initializes a new instance of MyActor
+  /// Initializes a new instance of the OrderActor.
   /// </summary>
   /// <param name="host">The Dapr.Actors.Runtime.ActorHost that will host this actor instance.</param>
   /// <param name="orderStateRepository">The order state repository.</param>
@@ -46,14 +44,10 @@ public class OrderActor : Actor, IOrderActor
   {
     Logger.LogDebug("CreateOrderAsync start. OrderId: {orderId}", order.OrderId);
 
-    var actorState = new OrderActorState
-    {
-      ActorCreatedDateTimeUtc = DateTime.UtcNow,
-      Order = order
-    };
+    var actorState = OrderActorState.CreateActorState(order);
 
     await Task.WhenAll(
-      _orderStateRepository.CreateOrderAsync(order),
+      _orderStateRepository.SaveOrderAsync(order),
       _orderPubSubRepository.PublishOrderEvent(order),
       StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
 
@@ -71,10 +65,10 @@ public class OrderActor : Actor, IOrderActor
     // Update order details and representative actor state.
     order.OrderUpdatedDateTimeUtc = DateTime.UtcNow;
     order.OrderState = OrderState.CheckOut;
-    actorState.UpdateOrder(order);
+    actorState = OrderActorState.UpdateOrder(actorState, order);
 
     await Task.WhenAll(
-      _orderStateRepository.CheckoutOrderAsync(order),
+      _orderStateRepository.SaveOrderAsync(order),
       _orderPubSubRepository.PublishOrderEvent(order),
       StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
 
@@ -92,14 +86,26 @@ public class OrderActor : Actor, IOrderActor
     // Update order details and representative actor state.
     order.OrderUpdatedDateTimeUtc = DateTime.UtcNow;
     order.OrderState = OrderState.Complete;
-    actorState.UpdateOrder(order);
+    actorState = OrderActorState.UpdateOrder(actorState, order);
 
     await Task.WhenAll(
-      _orderStateRepository.CheckoutOrderAsync(order),
+      _orderStateRepository.SaveOrderAsync(order),
       _orderPubSubRepository.PublishOrderEvent(order),
       StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
 
     Logger.LogDebug("MarkOrderAsCompletedAsync end. OrderId: {orderId}", orderId);
+  }
+
+  /// <inheritdoc />
+  protected override async Task OnDeactivateAsync()
+  {
+    Logger.LogDebug("OnDeactivateAsync start.");
+
+    var actorState = await GetActorStateAsync();
+    actorState = OrderActorState.MarkActorStateAsDeactivated(actorState);
+    await StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState);
+
+    Logger.LogDebug("OnDeactivateAsync end.");
   }
 
   private async Task<OrderActorState> GetActorStateAsync()

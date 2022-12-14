@@ -10,22 +10,21 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile>XmlDocumentation\OrderApi.xml</DocumentationFile>
+    <DocumentationFile>XmlDocumentation\GarbageCollector.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DocumentationFile>XmlDocumentation\OrderApi.xml</DocumentationFile>
+    <DocumentationFile>XmlDocumentation\GarbageCollector.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="XmlDocumentation\" />
     <Folder Include="Controllers\" />
     <Folder Include="Managers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
-    <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.9.0" />
   </ItemGroup>
 
   <ItemGroup>

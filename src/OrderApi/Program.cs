@@ -36,12 +36,12 @@ builder.Services.AddActors(options =>
 
   // Setup actor config
   var actorConfig = builder.Configuration.GetSection(nameof(ActorConfig)).Get<ActorConfig>();
-  options.ActorIdleTimeout = TimeSpan.FromMinutes(actorConfig.ActorIdleTimeout);
-  options.ActorScanInterval = TimeSpan.FromSeconds(actorConfig.ActorScanInterval);
-  options.DrainOngoingCallTimeout = TimeSpan.FromSeconds(actorConfig.DrainOngoingCallTimeout);
-  options.DrainRebalancedActors = actorConfig.DrainRebalancedActors;
-  options.RemindersStoragePartitions = actorConfig.RemindersStoragePartitions;
-  options.ReentrancyConfig = actorConfig.ReentrancyConfig;
+  options.ActorIdleTimeout = TimeSpan.FromMinutes(actorConfig!.ActorIdleTimeout);
+  options.ActorScanInterval = TimeSpan.FromSeconds(actorConfig!.ActorScanInterval);
+  options.DrainOngoingCallTimeout = TimeSpan.FromSeconds(actorConfig!.DrainOngoingCallTimeout);
+  options.DrainRebalancedActors = actorConfig!.DrainRebalancedActors;
+  options.RemindersStoragePartitions = actorConfig!.RemindersStoragePartitions;
+  options.ReentrancyConfig = actorConfig!.ReentrancyConfig;
 });
 builder.Services.AddDaprClient();
 
@@ -64,4 +64,3 @@ app.MapActorsHandlers();
 app.UseRouting();
 app.MapControllers();
 app.Run();
-

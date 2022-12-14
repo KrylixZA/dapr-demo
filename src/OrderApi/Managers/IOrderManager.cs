@@ -16,10 +16,12 @@ public interface IOrderManager
   /// <summary>
   /// Begins the checkout process for order.
   /// </summary>
-  /// <remarks>
-  /// An order is represented by an actor. T
-  /// </remarks>
-  /// <param name="orderId"></param>
-  /// <returns></returns>
+  /// <param name="orderId">The order identifier.</param>
   Task CheckoutOrderAsync(Guid orderId);
+
+  /// <summary>
+  /// Completes an order.
+  /// </summary>
+  /// <param name="orderId">The order identifier.</param>
+  Task CompleteOrderAsync(Guid orderId);
 }

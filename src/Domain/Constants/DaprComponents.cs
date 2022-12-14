@@ -19,4 +19,9 @@ public static class DaprComponents
   /// The pubsub component. 
   /// </summary>
   public const string PubSub = "pubsub";
+
+  /// <summary>
+  /// The component holding the AES secrets.
+  /// </summary>
+  public const string AesSecretStore = "aes";
 }

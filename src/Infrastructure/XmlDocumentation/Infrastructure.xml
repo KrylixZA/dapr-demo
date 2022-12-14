@@ -53,9 +53,29 @@
             Default: false
             </summary>
         </member>
+        <member name="T:Infrastructure.Actors.ActorState">
+            <summary>
+            Defines an enumeration of valid states an actor can be in.
+            </summary>
+        </member>
+        <member name="F:Infrastructure.Actors.ActorState.Active">
+            <summary>
+            The actor is currently active.
+            </summary>
+        </member>
+        <member name="F:Infrastructure.Actors.ActorState.Deactivated">
+            <summary>
+            The actor is deactivated.
+            </summary>
+        </member>
+        <member name="F:Infrastructure.Actors.ActorState.Reactivated">
+            <summary>
+            The actor has been reactivated and is now active again.
+            </summary>
+        </member>
         <member name="T:Infrastructure.Actors.OrderActor">
             <summary>
-            Implements a contract for my test actor.
+            Represents an order as a virtual actor.
             </summary>
         </member>
         <member name="P:Infrastructure.Actors.OrderActor.ActorType">
@@ -65,7 +85,7 @@
         </member>
         <member name="M:Infrastructure.Actors.OrderActor.#ctor(Dapr.Actors.Runtime.ActorHost,Application.Repositories.IOrderStateRepository,Application.Repositories.IOrderPubSubRepository)">
             <summary>
-            Initializes a new instance of MyActor
+            Initializes a new instance of the OrderActor.
             </summary>
             <param name="host">The Dapr.Actors.Runtime.ActorHost that will host this actor instance.</param>
             <param name="orderStateRepository">The order state repository.</param>
@@ -77,46 +97,66 @@
         <member name="M:Infrastructure.Actors.OrderActor.CheckoutOrderAsync(System.Guid)">
             <inheritdoc />
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.OnActivateAsync">
-            <summary>
-            This method is called whenever an actor is activated.
-            An actor is activated the first time any of its methods are invoked.
-            </summary>
+        <member name="M:Infrastructure.Actors.OrderActor.MarkOrderAsCompletedAsync(System.Guid)">
+            <inheritdoc />
         </member>
         <member name="M:Infrastructure.Actors.OrderActor.OnDeactivateAsync">
+            <inheritdoc />
+        </member>
+        <member name="T:Infrastructure.Actors.OrderActorState">
             <summary>
-            This method is called whenever an actor is deactivated after a period of inactivity.
+            Represents the current state of the actor.
             </summary>
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.RegisterReminder">
+        <member name="P:Infrastructure.Actors.OrderActorState.ActorCreatedDateTimeUtc">
             <summary>
-            Register MyReminder reminder with the actor
+            The UTC date and time when the actor was created.
             </summary>
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.UnregisterReminder">
+        <member name="P:Infrastructure.Actors.OrderActorState.ActorUpdatedDateTimeUtc">
             <summary>
-            Unregister MyReminder reminder with the actor
+            The UTC date and time when the actor was last updated.
             </summary>
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.ReceiveReminderAsync(System.String,System.Byte[],System.TimeSpan,System.TimeSpan)">
+        <member name="P:Infrastructure.Actors.OrderActorState.ActorDeactivatedDateTimeUtc">
             <summary>
-            Implement IRemindeable.ReceiveReminderAsync() which is call back invoked when an actor reminder is triggered.
+            The UTC date and time when the actor was deactivated.
             </summary>
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.RegisterTimer">
+        <member name="P:Infrastructure.Actors.OrderActorState.ActorReactivatedDateTimeUtc">
             <summary>
-            Register MyTimer timer with the actor
+            The UTC date and time when the actor was reactivated.
             </summary>
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.UnregisterTimer">
+        <member name="P:Infrastructure.Actors.OrderActorState.CurrentActorState">
             <summary>
-            Unregister MyTimer timer with the actor
+            Represents the current actor state.
             </summary>
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.OnTimerCallBack(System.Byte[])">
+        <member name="P:Infrastructure.Actors.OrderActorState.Order">
             <summary>
-            Timer callback once timer is expired
+            The details of the order.
             </summary>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActorState.CreateActorState(Domain.Models.Order)">
+            <summary>
+            Creates a new instance of the actor state from the order.
+            </summary>
+            <param name="order">The order.</param>
+            <returns>An instance of the actor state based off the order.</returns>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActorState.UpdateOrder(Infrastructure.Actors.OrderActorState,Domain.Models.Order)">
+            <summary>
+            Updates the order details in the actor state, as well as the <see cref="P:Infrastructure.Actors.OrderActorState.ActorUpdatedDateTimeUtc"/> field.
+            </summary>
+            <param name="orderActorState">The actor state.</param>
+            <param name="updatedOrder">The updated order.</param>
+        </member>
+        <member name="M:Infrastructure.Actors.OrderActorState.MarkActorStateAsDeactivated(Infrastructure.Actors.OrderActorState)">
+            <summary>
+            Updates the order details in the actor state, as well as the <see cref="P:Infrastructure.Actors.OrderActorState.ActorUpdatedDateTimeUtc"/> and <see cref="P:Infrastructure.Actors.OrderActorState.ActorDeactivatedDateTimeUtc"/> fields.
+            </summary>
+            <param name="orderActorState">The actor state.</param>
         </member>
         <member name="T:Infrastructure.Helpers.AesEncryptionHelper">
             <summary>
@@ -128,19 +168,11 @@
             Instantiates a new instance of the AesEncryptionHelper class.
             </summary>
         </member>
-        <member name="M:Infrastructure.Helpers.AesEncryptionHelper.EncryptStringAsync(System.String)">
+        <member name="M:Infrastructure.Helpers.AesEncryptionHelper.EncryptObjectAsync``1(``0)">
             <inheritdoc />
         </member>
-        <member name="T:Infrastructure.Managers.OrderManager">
-            <summary>
-            Implements a contract for managing orders.
-            </summary>
-        </member>
-        <member name="M:Infrastructure.Managers.OrderManager.CreateOrderAsync(Domain.Models.Order)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Infrastructure.Managers.OrderManager.CheckoutOrderAsync(System.Guid)">
-            <inheritdoc/>
+        <member name="M:Infrastructure.Helpers.AesEncryptionHelper.DecryptToObjectAsync``1(System.String)">
+            <inheritdoc />
         </member>
         <member name="T:Infrastructure.Repositories.OrderPubSubRepository">
             <summary>
@@ -153,7 +185,7 @@
             </summary>
             <param name="aesEncryptionHelper">The AES encryption helper.</param>
         </member>
-        <member name="M:Infrastructure.Repositories.OrderPubSubRepository.PublishOrderForCheckoutAsync(Domain.Models.Order)">
+        <member name="M:Infrastructure.Repositories.OrderPubSubRepository.PublishOrderEvent(Domain.Models.Order)">
             <inheritdoc/>
         </member>
         <member name="T:Infrastructure.Repositories.OrderStateRepository">
@@ -166,13 +198,10 @@
             Instantiates a new instance of the order state repository class.
             </summary>
         </member>
-        <member name="M:Infrastructure.Repositories.OrderStateRepository.CreateOrderAsync(Domain.Models.Order)">
+        <member name="M:Infrastructure.Repositories.OrderStateRepository.SaveOrderAsync(Domain.Models.Order)">
             <inheritdoc/>
         </member>
         <member name="M:Infrastructure.Repositories.OrderStateRepository.GetOrderAsync(System.Guid)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Infrastructure.Repositories.OrderStateRepository.CheckoutOrderAsync(Domain.Models.Order)">
             <inheritdoc/>
         </member>
     </members>

@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GarbageCollector</name>
+    </assembly>
+    <members>
+        <member name="T:GarbageCollector.Controllers.GarbageCollectorController">
+            <summary>
+            Exposes endpoints for interacting with order actor garbage collection.
+            </summary>
+        </member>
+        <member name="M:GarbageCollector.Controllers.GarbageCollectorController.#ctor(GarbageCollector.Managers.IGarbageCollectorManager,Microsoft.Extensions.Logging.ILogger{GarbageCollector.Controllers.GarbageCollectorController})">
+            <summary>
+            Instantiates a new instance of the OrderActorGarbageCollectorController class.
+            </summary>
+            <param name="manager">The manager.</param>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:GarbageCollector.Controllers.GarbageCollectorController.ProcessEventAsync(Dapr.CloudEvent{System.String})">
+            <summary>
+            Processes the encrypted order event.
+            </summary>
+            <param name="orderEvent">The order event.</param>
+        </member>
+        <member name="T:GarbageCollector.GarbageCollector.ActorGarbageCollector">
+            <summary>
+            Implements a contract for garbage collecting actors.
+            </summary>
+        </member>
+        <member name="M:GarbageCollector.GarbageCollector.ActorGarbageCollector.#ctor(System.Net.Http.IHttpClientFactory,Microsoft.Extensions.Logging.ILogger{GarbageCollector.GarbageCollector.ActorGarbageCollector})">
+            <summary>
+            Instantiates a new instance of the ActorGarbageCollector class.
+            </summary>
+            <param name="httpClientFactory">The HTTP client factory.</param>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:GarbageCollector.GarbageCollector.ActorGarbageCollector.GarbageCollectActorAsync(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:GarbageCollector.GarbageCollector.IActorGarbageCollector">
+            <summary>
+            Exposes a contract for garbage collecting actors.
+            </summary>
+        </member>
+        <member name="M:GarbageCollector.GarbageCollector.IActorGarbageCollector.GarbageCollectActorAsync(System.String,System.String)">
+            <summary>
+            Garbage collects the actor. This will forcefully deactivate the actor from working memory.
+            See more here: https://docs.dapr.io/reference/api/actors_api/#deactivate-actor
+            </summary>
+            <param name="actorId">The actor identifer.</param>
+            <param name="actorType">The actor type.</param>
+        </member>
+        <member name="T:GarbageCollector.Managers.GarbageCollectorManager">
+            <summary>
+            Implements a contract for managing order events and garbage collecting any completed orders.
+            </summary>
+        </member>
+        <member name="M:GarbageCollector.Managers.GarbageCollectorManager.#ctor(Application.Helpers.IAesEncryptionHelper,GarbageCollector.GarbageCollector.IActorGarbageCollector,Microsoft.Extensions.Logging.ILogger{GarbageCollector.Managers.GarbageCollectorManager})">
+            <summary>
+            Instantiates a new instance of the GarbageCollectorManager class.
+            </summary>
+            <param name="aesEncryptionHelper">The AES encryption helper.</param>
+            <param name="actorGarbageCollector">The actor garbage collector.</param>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:GarbageCollector.Managers.GarbageCollectorManager.ProcessOrderEventAsync(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:GarbageCollector.Managers.IGarbageCollectorManager">
+            <summary>
+            Provides a contract for managing order events and garbage collecting any completed orders.
+            </summary>
+        </member>
+        <member name="M:GarbageCollector.Managers.IGarbageCollectorManager.ProcessOrderEventAsync(System.String)">
+            <summary>
+            Processes the cloud event published as an encrypted string.
+            The encrypted string will first be decrypted to an Order model.
+            If the order is in a "Complete" state, we will process the event.
+            Any other events will be ignored.
+            </summary>
+            <param name="encryptedOrderEvent">The order event as an encrypted payload.</param>
+        </member>
+    </members>
+</doc>
