@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="XmlDocumentation\" />
+    <Folder Include="Managers\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,8 +31,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Dapr.Actors.AspNetCore" />
   </ItemGroup>
 </Project>

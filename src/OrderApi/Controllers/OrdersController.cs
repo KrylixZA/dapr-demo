@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Models;
-using Application.Managers;
+using OrderApi.Managers;
 
 namespace OrderApi.Controllers;
 

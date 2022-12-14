@@ -1,20 +1,18 @@
-﻿using System;
-using System.Xml.Linq;
-using Application.Actors;
+﻿using Application.Actors;
 using Application.Repositories;
 using Dapr.Actors.Runtime;
-using Domain;
 using Domain.Constants;
 using Domain.Enums;
 using Domain.Exceptions;
 using Domain.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Actors;
 
 /// <summary>
 /// Implements a contract for my test actor.
 /// </summary>
-public class OrderActor : Actor, IOrderActor, IRemindable
+public class OrderActor : Actor, IOrderActor
 {
   private readonly IOrderStateRepository _orderStateRepository;
   private readonly IOrderPubSubRepository _orderPubSubRepository;
@@ -46,116 +44,72 @@ public class OrderActor : Actor, IOrderActor, IRemindable
   /// <inheritdoc />
   public async Task CreateOrderAsync(Order order)
   {
+    Logger.LogDebug("CreateOrderAsync start. OrderId: {orderId}", order.OrderId);
+
+    var actorState = new OrderActorState
+    {
+      ActorCreatedDateTimeUtc = DateTime.UtcNow,
+      Order = order
+    };
+
     await Task.WhenAll(
       _orderStateRepository.CreateOrderAsync(order),
-      StateManager.SetStateAsync<Order>(
-        DaprComponents.OrderActorStateStore,  // state name
-        order)                                // actor state
-      );
+      _orderPubSubRepository.PublishOrderEvent(order),
+      StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
+
+    Logger.LogDebug("CreateOrderAsync end. OrderId: {orderId}", order.OrderId);
   }
 
   /// <inheritdoc />
   public async Task CheckoutOrderAsync(Guid orderId)
   {
-    var order = await _orderStateRepository.GetOrderAsync(orderId);
-    if (order is null)
+    Logger.LogDebug("CheckoutOrderAsync start. OrderId: {orderId}", orderId);
+
+    var actorState = await GetActorStateAsync();
+    var order = actorState.Order;
+
+    // Update order details and representative actor state.
+    order.OrderUpdatedDateTimeUtc = DateTime.UtcNow;
+    order.OrderState = OrderState.CheckOut;
+    actorState.UpdateOrder(order);
+
+    await Task.WhenAll(
+      _orderStateRepository.CheckoutOrderAsync(order),
+      _orderPubSubRepository.PublishOrderEvent(order),
+      StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
+
+    Logger.LogDebug("CheckoutOrderAsync end. OrderId: {orderId}", orderId);
+  }
+
+  /// <inheritdoc />
+  public async Task MarkOrderAsCompletedAsync(Guid orderId)
+  {
+    Logger.LogDebug("MarkOrderAsCompletedAsync start. OrderId: {orderId}", orderId);
+
+    var actorState = await GetActorStateAsync();
+    var order = actorState.Order;
+
+    // Update order details and representative actor state.
+    order.OrderUpdatedDateTimeUtc = DateTime.UtcNow;
+    order.OrderState = OrderState.Complete;
+    actorState.UpdateOrder(order);
+
+    await Task.WhenAll(
+      _orderStateRepository.CheckoutOrderAsync(order),
+      _orderPubSubRepository.PublishOrderEvent(order),
+      StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
+
+    Logger.LogDebug("MarkOrderAsCompletedAsync end. OrderId: {orderId}", orderId);
+  }
+
+  private async Task<OrderActorState> GetActorStateAsync()
+  {
+    var tryGetActorState = await StateManager.TryGetStateAsync<OrderActorState>(DaprComponents.OrderActorStateStore);
+    if (!tryGetActorState.HasValue)
     {
       throw new OrderNotFoundException();
     }
 
-    order.OrderUpdatedDateTimeUtc = DateTime.UtcNow;
-    order.OrderState = OrderState.CheckOut;
-
-    await Task.WhenAll(
-      _orderStateRepository.CheckoutOrderAsync(order),
-      _orderPubSubRepository.PublishOrderForCheckoutAsync(order),
-      StateManager.SetStateAsync<Order>(
-        DaprComponents.OrderActorStateStore,  // state name
-        order)                                // actor state
-      );
+    return tryGetActorState.Value;
   }
-
-  #region demo code
-  /// <summary>
-  /// This method is called whenever an actor is activated.
-  /// An actor is activated the first time any of its methods are invoked.
-  /// </summary>
-  protected override Task OnActivateAsync()
-  {
-    // Provides opportunity to perform some optional setup.
-    Console.WriteLine($"Activating actor id: {this.Id}");
-    return Task.CompletedTask;
-  }
-
-  /// <summary>
-  /// This method is called whenever an actor is deactivated after a period of inactivity.
-  /// </summary>
-  protected override Task OnDeactivateAsync()
-  {
-    // Provides Opporunity to perform optional cleanup.
-    Console.WriteLine($"Deactivating actor id: {this.Id}");
-    return Task.CompletedTask;
-  }
-
-  /// <summary>
-  /// Register MyReminder reminder with the actor
-  /// </summary>
-  public async Task RegisterReminder()
-  {
-    await this.RegisterReminderAsync(
-        "MyReminder",              // The name of the reminder
-        null,                      // User state passed to IRemindable.ReceiveReminderAsync()
-        TimeSpan.FromSeconds(5),   // Time to delay before invoking the reminder for the first time
-        TimeSpan.FromSeconds(5));  // Time interval between reminder invocations after the first invocation
-  }
-
-  /// <summary>
-  /// Unregister MyReminder reminder with the actor
-  /// </summary>
-  public Task UnregisterReminder()
-  {
-    Console.WriteLine("Unregistering MyReminder...");
-    return this.UnregisterReminderAsync("MyReminder");
-  }
-
-  /// <summary>
-  /// Implement IRemindeable.ReceiveReminderAsync() which is call back invoked when an actor reminder is triggered.
-  /// </summary>
-  public Task ReceiveReminderAsync(string reminderName, byte[] state, TimeSpan dueTime, TimeSpan period)
-  {
-    Console.WriteLine("ReceiveReminderAsync is called!");
-    return Task.CompletedTask;
-  }
-
-  /// <summary>
-  /// Register MyTimer timer with the actor
-  /// </summary>
-  public Task RegisterTimer()
-  {
-    return this.RegisterTimerAsync(
-        "MyTimer",                  // The name of the timer
-        nameof(this.OnTimerCallBack),       // Timer callback
-        null,                       // User state passed to OnTimerCallback()
-        TimeSpan.FromSeconds(5),    // Time to delay before the async callback is first invoked
-        TimeSpan.FromSeconds(5));   // Time interval between invocations of the async callback
-  }
-
-  /// <summary>
-  /// Unregister MyTimer timer with the actor
-  /// </summary>
-  public Task UnregisterTimer()
-  {
-    Console.WriteLine("Unregistering MyTimer...");
-    return this.UnregisterTimerAsync("MyTimer");
-  }
-
-  /// <summary>
-  /// Timer callback once timer is expired
-  /// </summary>
-  private Task OnTimerCallBack(byte[] data)
-  {
-    Console.WriteLine("OnTimerCallBack is called!");
-    return Task.CompletedTask;
-  }
-  #endregion
 }

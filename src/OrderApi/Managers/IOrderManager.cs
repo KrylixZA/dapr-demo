@@ -1,7 +1,6 @@
-﻿using System;
-using Domain.Models;
+﻿using Domain.Models;
 
-namespace Application.Managers;
+namespace OrderApi.Managers;
 
 /// <summary>
 /// Defines a contract for managing orders.

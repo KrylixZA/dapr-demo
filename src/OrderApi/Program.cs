@@ -1,11 +1,10 @@
 ﻿using System.Reflection;
 using Application.Helpers;
-using Application.Managers;
 using Application.Repositories;
 using Infrastructure.Actors;
 using Infrastructure.Helpers;
-using Infrastructure.Managers;
 using Infrastructure.Repositories;
+using OrderApi.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
 

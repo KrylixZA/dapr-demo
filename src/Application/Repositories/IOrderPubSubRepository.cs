@@ -8,8 +8,8 @@ namespace Application.Repositories;
 public interface IOrderPubSubRepository
 {
   /// <summary>
-  /// Publishes a messages to the "orders" queue with the details of the order to checkout.
+  /// Publishes a messages to the "orders" queue with the event details for the order.
   /// </summary>
   /// <param name="order">The order.</param>
-  Task PublishOrderForCheckoutAsync(Order order);
+  Task PublishOrderEvent(Order order);
 }

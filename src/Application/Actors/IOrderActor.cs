@@ -1,5 +1,4 @@
-﻿using System;
-using Dapr.Actors;
+﻿using Dapr.Actors;
 using Domain.Models;
 
 namespace Application.Actors;
@@ -21,4 +20,15 @@ public interface IOrderActor : IActor
   /// </summary>
   /// <param name="orderId">The order unique identifier.</param>
   Task CheckoutOrderAsync(Guid orderId);
+
+  /// <summary>
+  /// Marks the order as completed.
+  /// This can be triggered when we payment has been completed and delivery has taken place.
+  /// Completed orders will be written to a separate state store.
+  /// </summary>
+  /// <remarks>
+  /// For the sake of the demo, this will "delete" the actor.
+  /// </remarks>
+  /// <param name="orderId">The order unique identifier.</param>
+  Task MarkOrderAsCompletedAsync(Guid orderId);
 }

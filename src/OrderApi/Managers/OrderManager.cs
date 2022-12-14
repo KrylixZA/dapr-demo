@@ -1,13 +1,10 @@
-﻿using System;
-using Application.Actors;
-using Application.Managers;
-using Application.Repositories;
+﻿using Application.Actors;
 using Dapr.Actors;
 using Dapr.Actors.Client;
 using Domain.Models;
 using Infrastructure.Actors;
 
-namespace Infrastructure.Managers;
+namespace OrderApi.Managers;
 
 /// <summary>
 /// Implements a contract for managing orders.

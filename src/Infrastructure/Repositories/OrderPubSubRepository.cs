@@ -26,7 +26,7 @@ public class OrderPubSubRepository : IOrderPubSubRepository
   }
 
   /// <inheritdoc/>
-  public async Task PublishOrderForCheckoutAsync(Order order)
+  public async Task PublishOrderEvent(Order order)
   {
     var encryptedPayload = await _aesEncryptionHelper.EncryptStringAsync(JsonSerializer.Serialize(order));
     await _daprClient.PublishEventAsync<string>(

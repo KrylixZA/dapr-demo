@@ -22,6 +22,17 @@
             </summary>
             <param name="orderId">The order unique identifier.</param>
         </member>
+        <member name="M:Application.Actors.IOrderActor.MarkOrderAsCompletedAsync(System.Guid)">
+            <summary>
+            Marks the order as completed.
+            This can be triggered when we payment has been completed and delivery has taken place.
+            Completed orders will be written to a separate state store.
+            </summary>
+            <remarks>
+            For the sake of the demo, this will "delete" the actor.
+            </remarks>
+            <param name="orderId">The order unique identifier.</param>
+        </member>
         <member name="T:Application.Helpers.IAesEncryptionHelper">
             <summary>
             Provides a contract to help with AES symmetric encryption.
@@ -33,27 +44,6 @@
             </summary>
             <param name="stringToEncrypt">The string to encrypt.</param>
             <returns>The encrypted representation of the string.</returns>
-        </member>
-        <member name="T:Application.Managers.IOrderManager">
-            <summary>
-            Defines a contract for managing orders.
-            </summary>
-        </member>
-        <member name="M:Application.Managers.IOrderManager.CreateOrderAsync(Domain.Models.Order)">
-            <summary>
-            Attempts to persist the order to order store.
-            </summary>
-            <param name="order">The order details.</param>
-        </member>
-        <member name="M:Application.Managers.IOrderManager.CheckoutOrderAsync(System.Guid)">
-            <summary>
-            Begins the checkout process for order.
-            </summary>
-            <remarks>
-            An order is represented by an actor. T
-            </remarks>
-            <param name="orderId"></param>
-            <returns></returns>
         </member>
         <member name="T:Application.Repositories.IOrderPubSubRepository">
             <summary>

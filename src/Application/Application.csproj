@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="XmlDocumentation\" />
     <Folder Include="Repositories\" />
-    <Folder Include="Managers\" />
     <Folder Include="Actors\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
@@ -26,12 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Actors\" />
-    <None Remove="Dapr.Client" />
-    <None Remove="Dapr.Actors" />
-    <None Remove="Helpers\" />
-  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Dapr.Actors" Version="1.9.0" />
   </ItemGroup>
