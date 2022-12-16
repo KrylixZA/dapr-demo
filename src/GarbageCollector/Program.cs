@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Application.Helpers;
-using GarbageCollector.GarbageCollector;
 using GarbageCollector.Managers;
 using Infrastructure.Helpers;
 
@@ -31,7 +30,6 @@ builder.Services.AddHttpClient();
 
 // Dependency injection
 builder.Services.AddTransient<IGarbageCollectorManager, GarbageCollectorManager>();
-builder.Services.AddTransient<IActorGarbageCollector, ActorGarbageCollector>();
 builder.Services.AddTransient<IAesEncryptionHelper, AesEncryptionHelper>();
 
 var app = builder.Build();

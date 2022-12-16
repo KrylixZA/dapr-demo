@@ -51,6 +51,18 @@
             </remarks>
             <param name="orderId">The order unique identifier.</param>
         </member>
+        <member name="M:OrderApi.Controllers.OrdersController.DeactivateOrderActorAsync(System.Guid)">
+            <summary>
+            Forcefully deactivates the actor from state.
+            This will forcefully write the actor's current state to the state store and remove the actor from memory.
+            </summary>
+            <remarks>
+            The following steps will occur:
+            1. The actor will update it's own state into that of a "deactivated" state.
+            2. The actor will be removed from memory and it's state persisted to disk.
+            </remarks>
+            <param name="orderId">The order unique identifier.</param>
+        </member>
         <member name="T:OrderApi.Managers.IOrderManager">
             <summary>
             Defines a contract for managing orders.
@@ -74,16 +86,23 @@
             </summary>
             <param name="orderId">The order identifier.</param>
         </member>
+        <member name="M:OrderApi.Managers.IOrderManager.DeactivateOrderActorAsync(System.Guid)">
+            <summary>
+            Deactivates the order actor.
+            </summary>
+            <param name="orderId">The order identifier.</param>
+        </member>
         <member name="T:OrderApi.Managers.OrderManager">
             <summary>
             Implements a contract for managing orders.
             </summary>
         </member>
-        <member name="M:OrderApi.Managers.OrderManager.#ctor(Microsoft.Extensions.Logging.ILogger{OrderApi.Managers.OrderManager})">
+        <member name="M:OrderApi.Managers.OrderManager.#ctor(Microsoft.Extensions.Logging.ILogger{OrderApi.Managers.OrderManager},Infrastructure.GarbageCollector.IActorGarbageCollector)">
             <summary>
             Instantiates a new instance of the OrderManager class.
             </summary>
             <param name="logger">The logger.</param>
+            <param name="actorGarbageCollector">The actor garbage collector.</param>
         </member>
         <member name="M:OrderApi.Managers.OrderManager.CreateOrderAsync(Domain.Models.Order)">
             <inheritdoc/>
@@ -92,6 +111,9 @@
             <inheritdoc/>
         </member>
         <member name="M:OrderApi.Managers.OrderManager.CompleteOrderAsync(System.Guid)">
+            <inheritdoc/>
+        </member>
+        <member name="M:OrderApi.Managers.OrderManager.DeactivateOrderActorAsync(System.Guid)">
             <inheritdoc/>
         </member>
     </members>

@@ -3,6 +3,7 @@ using Dapr.Actors;
 using Dapr.Actors.Client;
 using Domain.Models;
 using Infrastructure.Actors;
+using Infrastructure.GarbageCollector;
 
 namespace OrderApi.Managers;
 
@@ -12,14 +13,17 @@ namespace OrderApi.Managers;
 public class OrderManager : IOrderManager
 {
   private readonly ILogger<OrderManager> _logger;
+  private readonly IActorGarbageCollector _actorGarbageCollector;
 
   /// <summary>
   /// Instantiates a new instance of the OrderManager class.
   /// </summary>
   /// <param name="logger">The logger.</param>
-  public OrderManager(ILogger<OrderManager> logger)
+  /// <param name="actorGarbageCollector">The actor garbage collector.</param>
+  public OrderManager(ILogger<OrderManager> logger, IActorGarbageCollector actorGarbageCollector)
   {
     _logger = logger;
+    _actorGarbageCollector = actorGarbageCollector;
   }
 
   /// <inheritdoc/>
@@ -38,7 +42,7 @@ public class OrderManager : IOrderManager
     _logger.LogDebug("CheckoutOrderAsync start. OrderId: {orderId}", orderId);
     var actorId = new ActorId(orderId.ToString());
     var orderActor = ActorProxy.Create<IOrderActor>(actorId, OrderActor.ActorType);
-    await orderActor.CheckoutOrderAsync(orderId);
+    await orderActor.CheckoutOrderAsync();
     _logger.LogDebug("CheckoutOrderAsync end. OrderId: {orderId}", orderId);
   }
 
@@ -48,7 +52,18 @@ public class OrderManager : IOrderManager
     _logger.LogDebug("CompleteOrderAsync start. OrderId: {orderId}", orderId);
     var actorId = new ActorId(orderId.ToString());
     var orderActor = ActorProxy.Create<IOrderActor>(actorId, OrderActor.ActorType);
-    await orderActor.MarkOrderAsCompletedAsync(orderId);
+    await orderActor.MarkOrderAsCompletedAsync();
     _logger.LogDebug("CompleteOrderAsync end. OrderId: {orderId}", orderId);
+  }
+
+  /// <inheritdoc/>
+  public async Task DeactivateOrderActorAsync(Guid orderId)
+  {
+    _logger.LogDebug("DeactivateOrderActorAsync start. OrderId: {orderId}", orderId);
+    var actorId = new ActorId(orderId.ToString());
+    var orderActor = ActorProxy.Create<IOrderActor>(actorId, OrderActor.ActorType);
+    await orderActor.DeactivateActorAsync();
+    await _actorGarbageCollector.GarbageCollectActorAsync(orderId.ToString(), OrderActor.ActorType);
+    _logger.LogDebug("DeactivateOrderActorAsync end. OrderId: {orderId}", orderId);
   }
 }

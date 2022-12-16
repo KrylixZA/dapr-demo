@@ -94,13 +94,13 @@
         <member name="M:Infrastructure.Actors.OrderActor.CreateOrderAsync(Domain.Models.Order)">
             <inheritdoc />
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.CheckoutOrderAsync(System.Guid)">
+        <member name="M:Infrastructure.Actors.OrderActor.CheckoutOrderAsync">
             <inheritdoc />
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.MarkOrderAsCompletedAsync(System.Guid)">
+        <member name="M:Infrastructure.Actors.OrderActor.MarkOrderAsCompletedAsync">
             <inheritdoc />
         </member>
-        <member name="M:Infrastructure.Actors.OrderActor.OnDeactivateAsync">
+        <member name="M:Infrastructure.Actors.OrderActor.DeactivateActorAsync">
             <inheritdoc />
         </member>
         <member name="T:Infrastructure.Actors.OrderActorState">
@@ -145,7 +145,7 @@
             <param name="order">The order.</param>
             <returns>An instance of the actor state based off the order.</returns>
         </member>
-        <member name="M:Infrastructure.Actors.OrderActorState.UpdateOrder(Infrastructure.Actors.OrderActorState,Domain.Models.Order)">
+        <member name="M:Infrastructure.Actors.OrderActorState.UpdateActorState(Infrastructure.Actors.OrderActorState,Domain.Models.Order)">
             <summary>
             Updates the order details in the actor state, as well as the <see cref="P:Infrastructure.Actors.OrderActorState.ActorUpdatedDateTimeUtc"/> field.
             </summary>
@@ -157,6 +157,34 @@
             Updates the order details in the actor state, as well as the <see cref="P:Infrastructure.Actors.OrderActorState.ActorUpdatedDateTimeUtc"/> and <see cref="P:Infrastructure.Actors.OrderActorState.ActorDeactivatedDateTimeUtc"/> fields.
             </summary>
             <param name="orderActorState">The actor state.</param>
+        </member>
+        <member name="T:Infrastructure.GarbageCollector.ActorGarbageCollector">
+            <summary>
+            Implements a contract for garbage collecting actors.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.GarbageCollector.ActorGarbageCollector.#ctor(Microsoft.Extensions.Logging.ILogger{Infrastructure.GarbageCollector.ActorGarbageCollector},System.Net.Http.IHttpClientFactory)">
+            <summary>
+            Instantiates a new instance of the ActorGarbageCollector class.
+            </summary>
+            <param name="logger">The logger.</param>
+            <param name="httpClientFactory">The HTTP client factory.</param>
+        </member>
+        <member name="M:Infrastructure.GarbageCollector.ActorGarbageCollector.GarbageCollectActorAsync(System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Infrastructure.GarbageCollector.IActorGarbageCollector">
+            <summary>
+            Exposes a contract for garbage collecting actors.
+            </summary>
+        </member>
+        <member name="M:Infrastructure.GarbageCollector.IActorGarbageCollector.GarbageCollectActorAsync(System.String,System.String)">
+            <summary>
+            Garbage collects the actor. This will forcefully deactivate the actor from working memory.
+            See more here: https://docs.dapr.io/reference/api/actors_api/#deactivate-actor
+            </summary>
+            <param name="actorId">The actor identifer.</param>
+            <param name="actorType">The actor type.</param>
         </member>
         <member name="T:Infrastructure.Helpers.AesEncryptionHelper">
             <summary>

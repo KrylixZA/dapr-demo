@@ -24,4 +24,10 @@ public interface IOrderManager
   /// </summary>
   /// <param name="orderId">The order identifier.</param>
   Task CompleteOrderAsync(Guid orderId);
+
+  /// <summary>
+  /// Deactivates the order actor.
+  /// </summary>
+  /// <param name="orderId">The order identifier.</param>
+  Task DeactivateOrderActorAsync(Guid orderId);
 }

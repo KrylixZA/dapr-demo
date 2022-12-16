@@ -56,7 +56,7 @@ public class OrderActorState
   /// </summary>
   /// <param name="orderActorState">The actor state.</param>
   /// <param name="updatedOrder">The updated order.</param>
-  public static OrderActorState UpdateOrder(OrderActorState orderActorState, Order updatedOrder)
+  public static OrderActorState UpdateActorState(OrderActorState orderActorState, Order updatedOrder)
   {
     orderActorState.Order = updatedOrder;
     orderActorState.ActorUpdatedDateTimeUtc = updatedOrder.OrderUpdatedDateTimeUtc;
@@ -70,7 +70,6 @@ public class OrderActorState
   public static OrderActorState MarkActorStateAsDeactivated(OrderActorState orderActorState)
   {
     var utcNow = DateTime.UtcNow;
-    orderActorState.ActorUpdatedDateTimeUtc = utcNow;
     orderActorState.ActorDeactivatedDateTimeUtc = utcNow;
     orderActorState.CurrentActorState = ActorState.Deactivated;
 

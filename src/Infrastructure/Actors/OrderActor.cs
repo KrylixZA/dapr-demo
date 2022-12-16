@@ -55,9 +55,9 @@ public class OrderActor : Actor, IOrderActor
   }
 
   /// <inheritdoc />
-  public async Task CheckoutOrderAsync(Guid orderId)
+  public async Task CheckoutOrderAsync()
   {
-    Logger.LogDebug("CheckoutOrderAsync start. OrderId: {orderId}", orderId);
+    Logger.LogDebug("CheckoutOrderAsync start");
 
     var actorState = await GetActorStateAsync();
     var order = actorState.Order;
@@ -65,20 +65,20 @@ public class OrderActor : Actor, IOrderActor
     // Update order details and representative actor state.
     order.OrderUpdatedDateTimeUtc = DateTime.UtcNow;
     order.OrderState = OrderState.CheckOut;
-    actorState = OrderActorState.UpdateOrder(actorState, order);
+    actorState = OrderActorState.UpdateActorState(actorState, order);
 
     await Task.WhenAll(
       _orderStateRepository.SaveOrderAsync(order),
       _orderPubSubRepository.PublishOrderEvent(order),
       StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
 
-    Logger.LogDebug("CheckoutOrderAsync end. OrderId: {orderId}", orderId);
+    Logger.LogDebug("CheckoutOrderAsync end");
   }
 
   /// <inheritdoc />
-  public async Task MarkOrderAsCompletedAsync(Guid orderId)
+  public async Task MarkOrderAsCompletedAsync()
   {
-    Logger.LogDebug("MarkOrderAsCompletedAsync start. OrderId: {orderId}", orderId);
+    Logger.LogDebug("MarkOrderAsCompletedAsync start");
 
     var actorState = await GetActorStateAsync();
     var order = actorState.Order;
@@ -86,26 +86,24 @@ public class OrderActor : Actor, IOrderActor
     // Update order details and representative actor state.
     order.OrderUpdatedDateTimeUtc = DateTime.UtcNow;
     order.OrderState = OrderState.Complete;
-    actorState = OrderActorState.UpdateOrder(actorState, order);
+    actorState = OrderActorState.UpdateActorState(actorState, order);
 
     await Task.WhenAll(
       _orderStateRepository.SaveOrderAsync(order),
       _orderPubSubRepository.PublishOrderEvent(order),
       StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
 
-    Logger.LogDebug("MarkOrderAsCompletedAsync end. OrderId: {orderId}", orderId);
+    Logger.LogDebug("MarkOrderAsCompletedAsync end");
   }
 
   /// <inheritdoc />
-  protected override async Task OnDeactivateAsync()
+  public async Task DeactivateActorAsync()
   {
-    Logger.LogDebug("OnDeactivateAsync start.");
-
+    Logger.LogDebug("DeactivateActorAsync start");
     var actorState = await GetActorStateAsync();
     actorState = OrderActorState.MarkActorStateAsDeactivated(actorState);
     await StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState);
-
-    Logger.LogDebug("OnDeactivateAsync end.");
+    Logger.LogDebug("DeactivateActorAsync end");
   }
 
   private async Task<OrderActorState> GetActorStateAsync()

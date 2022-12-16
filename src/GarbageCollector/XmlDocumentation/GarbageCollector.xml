@@ -22,46 +22,18 @@
             </summary>
             <param name="orderEvent">The order event.</param>
         </member>
-        <member name="T:GarbageCollector.GarbageCollector.ActorGarbageCollector">
-            <summary>
-            Implements a contract for garbage collecting actors.
-            </summary>
-        </member>
-        <member name="M:GarbageCollector.GarbageCollector.ActorGarbageCollector.#ctor(System.Net.Http.IHttpClientFactory,Microsoft.Extensions.Logging.ILogger{GarbageCollector.GarbageCollector.ActorGarbageCollector})">
-            <summary>
-            Instantiates a new instance of the ActorGarbageCollector class.
-            </summary>
-            <param name="httpClientFactory">The HTTP client factory.</param>
-            <param name="logger">The logger.</param>
-        </member>
-        <member name="M:GarbageCollector.GarbageCollector.ActorGarbageCollector.GarbageCollectActorAsync(System.String,System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="T:GarbageCollector.GarbageCollector.IActorGarbageCollector">
-            <summary>
-            Exposes a contract for garbage collecting actors.
-            </summary>
-        </member>
-        <member name="M:GarbageCollector.GarbageCollector.IActorGarbageCollector.GarbageCollectActorAsync(System.String,System.String)">
-            <summary>
-            Garbage collects the actor. This will forcefully deactivate the actor from working memory.
-            See more here: https://docs.dapr.io/reference/api/actors_api/#deactivate-actor
-            </summary>
-            <param name="actorId">The actor identifer.</param>
-            <param name="actorType">The actor type.</param>
-        </member>
         <member name="T:GarbageCollector.Managers.GarbageCollectorManager">
             <summary>
             Implements a contract for managing order events and garbage collecting any completed orders.
             </summary>
         </member>
-        <member name="M:GarbageCollector.Managers.GarbageCollectorManager.#ctor(Application.Helpers.IAesEncryptionHelper,GarbageCollector.GarbageCollector.IActorGarbageCollector,Microsoft.Extensions.Logging.ILogger{GarbageCollector.Managers.GarbageCollectorManager})">
+        <member name="M:GarbageCollector.Managers.GarbageCollectorManager.#ctor(Microsoft.Extensions.Logging.ILogger{GarbageCollector.Managers.GarbageCollectorManager},Application.Helpers.IAesEncryptionHelper,System.Net.Http.IHttpClientFactory)">
             <summary>
             Instantiates a new instance of the GarbageCollectorManager class.
             </summary>
-            <param name="aesEncryptionHelper">The AES encryption helper.</param>
-            <param name="actorGarbageCollector">The actor garbage collector.</param>
             <param name="logger">The logger.</param>
+            <param name="aesEncryptionHelper">The AES encryption helper.</param>
+            <param name="httpClientFactory">The HTTP client factory.</param>
         </member>
         <member name="M:GarbageCollector.Managers.GarbageCollectorManager.ProcessOrderEventAsync(System.String)">
             <inheritdoc/>

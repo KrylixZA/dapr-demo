@@ -21,6 +21,7 @@
     <Folder Include="Repositories\" />
     <Folder Include="Actors\" />
     <Folder Include="Helpers\" />
+    <Folder Include="GarbageCollector\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,5 +33,6 @@
     <PackageReference Include="Dapr.Actors" Version="1.9.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Dapr.Client" Version="1.9.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
   </ItemGroup>
 </Project>

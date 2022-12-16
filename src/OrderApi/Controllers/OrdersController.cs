@@ -55,7 +55,7 @@ public class OrdersController : ControllerBase
   /// </remarks>
   /// <param name="orderId">The order unique identifier.</param>
   [HttpPost]
-  [Route("checkout/order/{orderId}")]
+  [Route("checkout/{orderId}")]
   public async Task<IActionResult> CheckoutOrderAsync([Required][FromRoute] Guid orderId)
   {
     _logger.LogInformation("CheckoutOrderAsync start. OrderId: {orderId}", orderId);
@@ -75,12 +75,32 @@ public class OrdersController : ControllerBase
   /// </remarks>
   /// <param name="orderId">The order unique identifier.</param>
   [HttpPost]
-  [Route("complete/order/{orderId}")]
+  [Route("complete/{orderId}")]
   public async Task<IActionResult> CompleteOrderAsync([Required][FromRoute] Guid orderId)
   {
     _logger.LogInformation("CompleteOrderAsync start. OrderId: {orderId}", orderId);
     await _orderManager.CompleteOrderAsync(orderId);
     _logger.LogInformation("CompleteOrderAsync start. OrderId: {orderId}", orderId);
+    return Ok();
+  }
+
+  /// <summary>
+  /// Forcefully deactivates the actor from state.
+  /// This will forcefully write the actor's current state to the state store and remove the actor from memory.
+  /// </summary>
+  /// <remarks>
+  /// The following steps will occur:
+  /// 1. The actor will update it's own state into that of a "deactivated" state.
+  /// 2. The actor will be removed from memory and it's state persisted to disk.
+  /// </remarks>
+  /// <param name="orderId">The order unique identifier.</param>
+  [HttpDelete]
+  [Route("deactivate/{orderId}")]
+  public async Task<IActionResult> DeactivateOrderActorAsync([Required][FromRoute] Guid orderId)
+  {
+    _logger.LogInformation("DeactivateOrderActorAsync start. OrderId: {orderId}", orderId);
+    await _orderManager.DeactivateOrderActorAsync(orderId);
+    _logger.LogInformation("DeactivateOrderActorAsync end. OrderId: {orderId}", orderId);
     return Ok();
   }
 }

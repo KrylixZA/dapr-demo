@@ -1,7 +1,7 @@
 ﻿using Application.Helpers;
+using Dapr.Actors;
 using Domain.Enums;
 using Domain.Models;
-using GarbageCollector.GarbageCollector;
 using Infrastructure.Actors;
 
 namespace GarbageCollector.Managers;
@@ -11,24 +11,24 @@ namespace GarbageCollector.Managers;
 /// </summary>
 public class GarbageCollectorManager : IGarbageCollectorManager
 {
-  private readonly IAesEncryptionHelper _aesEncryptionHelper;
-  private readonly IActorGarbageCollector _actorGarbageCollector;
   private readonly ILogger<GarbageCollectorManager> _logger;
+  private readonly IAesEncryptionHelper _aesEncryptionHelper;
+  private readonly IHttpClientFactory _httpClientFactory;
 
   /// <summary>
   /// Instantiates a new instance of the GarbageCollectorManager class.
   /// </summary>
-  /// <param name="aesEncryptionHelper">The AES encryption helper.</param>
-  /// <param name="actorGarbageCollector">The actor garbage collector.</param>
   /// <param name="logger">The logger.</param>
+  /// <param name="aesEncryptionHelper">The AES encryption helper.</param>
+  /// <param name="httpClientFactory">The HTTP client factory.</param>
   public GarbageCollectorManager(
+    ILogger<GarbageCollectorManager> logger,
     IAesEncryptionHelper aesEncryptionHelper,
-    IActorGarbageCollector actorGarbageCollector,
-    ILogger<GarbageCollectorManager> logger)
+    IHttpClientFactory httpClientFactory)
   {
-    _aesEncryptionHelper = aesEncryptionHelper;
-    _actorGarbageCollector = actorGarbageCollector;
     _logger = logger;
+    _aesEncryptionHelper = aesEncryptionHelper;
+    _httpClientFactory = httpClientFactory;
   }
 
   /// <inheritdoc/>
@@ -38,12 +38,20 @@ public class GarbageCollectorManager : IGarbageCollectorManager
     var order = await _aesEncryptionHelper.DecryptToObjectAsync<Order>(encryptedOrderEvent);
     if (order.OrderState != OrderState.Complete)
     {
-      _logger.LogWarning("ProcessOrderEventAsync end. Event is not a complete event.");
+      _logger.LogDebug("ProcessOrderEventAsync end. Event is not a complete event.");
       return;
     }
 
-    await _actorGarbageCollector.GarbageCollectActorAsync(order.OrderId.ToString(), OrderActor.ActorType);
+    await InvokeDeactivateOrderActorAsync(order.OrderId);
     _logger.LogDebug("ProcessOrderEventAsync end");
+  }
+
+  private async Task InvokeDeactivateOrderActorAsync(Guid orderId)
+  {
+    var client = _httpClientFactory.CreateClient();
+    var request = new HttpRequestMessage(HttpMethod.Delete, $"http://orderapi:5000/v1/orders/deactivate/{orderId}");
+    var response = await client.SendAsync(request);
+    response.EnsureSuccessStatusCode();
   }
 }
 

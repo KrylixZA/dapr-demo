@@ -2,6 +2,7 @@
 using Application.Helpers;
 using Application.Repositories;
 using Infrastructure.Actors;
+using Infrastructure.GarbageCollector;
 using Infrastructure.Helpers;
 using Infrastructure.Repositories;
 using OrderApi.Managers;
@@ -44,10 +45,12 @@ builder.Services.AddActors(options =>
   options.ReentrancyConfig = actorConfig!.ReentrancyConfig;
 });
 builder.Services.AddDaprClient();
+builder.Services.AddHttpClient();
 
 // Dependency injection
 builder.Services.AddTransient<IOrderManager, OrderManager>();
 builder.Services.AddTransient<IAesEncryptionHelper, AesEncryptionHelper>();
+builder.Services.AddTransient<IActorGarbageCollector, ActorGarbageCollector>();
 builder.Services.AddTransient<IOrderPubSubRepository, OrderPubSubRepository>();
 builder.Services.AddTransient<IOrderStateRepository, OrderStateRepository>();
 
