@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Actors;
+﻿namespace OrderApi.Actors;
 
 /// <summary>
 /// Defines an enumeration of valid states an actor can be in.

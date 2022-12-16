@@ -1,9 +1,9 @@
-﻿using Application.Actors;
+﻿using Application.GarbageCollector;
 using Dapr.Actors;
 using Dapr.Actors.Client;
 using Domain.Models;
-using Infrastructure.Actors;
 using Infrastructure.GarbageCollector;
+using OrderApi.Actors;
 
 namespace OrderApi.Managers;
 

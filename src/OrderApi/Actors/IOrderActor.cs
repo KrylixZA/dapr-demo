@@ -1,7 +1,7 @@
 ﻿using Dapr.Actors;
 using Domain.Models;
 
-namespace Infrastructure.Actors;
+namespace OrderApi.Actors;
 
 /// <summary>
 /// Defines a contract for representing an order 

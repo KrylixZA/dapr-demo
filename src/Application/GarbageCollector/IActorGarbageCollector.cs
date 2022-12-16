@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.GarbageCollector;
+﻿namespace Application.GarbageCollector;
 
 /// <summary>
 /// Exposes a contract for garbage collecting actors.

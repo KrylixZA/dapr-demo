@@ -1,6 +1,6 @@
 ﻿using Domain.Models;
 
-namespace Infrastructure.Actors;
+namespace OrderApi.Actors;
 
 /// <summary>
 /// Represents the current state of the actor.

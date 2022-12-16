@@ -19,9 +19,13 @@
     <Folder Include="XmlDocumentation\" />
     <Folder Include="Repositories\" />
     <Folder Include="Helpers\" />
+    <Folder Include="GarbageCollector\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="GarbageCollector\" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Application.GarbageCollector;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.GarbageCollector;
 

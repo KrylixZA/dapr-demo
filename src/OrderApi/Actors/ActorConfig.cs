@@ -1,6 +1,6 @@
 ﻿using Dapr.Actors;
 
-namespace Infrastructure.Actors;
+namespace OrderApi.Actors;
 
 /// <summary>
 /// Defines all the properties of Actor configuration in Dapr.

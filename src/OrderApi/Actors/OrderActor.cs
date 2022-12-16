@@ -1,5 +1,4 @@
-﻿using Application.Actors;
-using Application.Repositories;
+﻿using Application.Repositories;
 using Dapr.Actors.Runtime;
 using Domain.Constants;
 using Domain.Enums;
@@ -7,7 +6,7 @@ using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Actors;
+namespace OrderApi.Actors;
 
 /// <summary>
 /// Represents an order as a virtual actor.

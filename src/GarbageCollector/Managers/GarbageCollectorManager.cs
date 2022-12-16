@@ -2,7 +2,6 @@
 using Dapr.Actors;
 using Domain.Enums;
 using Domain.Models;
-using Infrastructure.Actors;
 
 namespace GarbageCollector.Managers;
 

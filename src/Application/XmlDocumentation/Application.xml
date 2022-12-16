@@ -4,34 +4,18 @@
         <name>Application</name>
     </assembly>
     <members>
-        <member name="T:Application.Actors.IOrderActor">
+        <member name="T:Application.GarbageCollector.IActorGarbageCollector">
             <summary>
-            Defines a contract for representing an order 
+            Exposes a contract for garbage collecting actors.
             </summary>
         </member>
-        <member name="M:Application.Actors.IOrderActor.CreateOrderAsync(Domain.Models.Order)">
+        <member name="M:Application.GarbageCollector.IActorGarbageCollector.GarbageCollectActorAsync(System.String,System.String)">
             <summary>
-            Creates an actor that represents the order.
+            Garbage collects the actor. This will forcefully deactivate the actor from working memory.
+            See more here: https://docs.dapr.io/reference/api/actors_api/#deactivate-actor
             </summary>
-            <param name="newOrder">The details of the order.</param>
-        </member>
-        <member name="M:Application.Actors.IOrderActor.CheckoutOrderAsync">
-            <summary>
-            Begins the checkout process for an order.
-            This will update the order state and the updated date time field.
-            </summary>
-        </member>
-        <member name="M:Application.Actors.IOrderActor.MarkOrderAsCompletedAsync">
-            <summary>
-            Marks the order as completed.
-            This can be triggered when we payment has been completed and delivery has taken place.
-            Completed orders will be written to a separate state store.
-            </summary>
-        </member>
-        <member name="M:Application.Actors.IOrderActor.DeactivateActorAsync">
-            <summary>
-            Deactivates the actor by writing updating its state to deactivated and writing it to state.
-            </summary>
+            <param name="actorId">The actor identifer.</param>
+            <param name="actorType">The actor type.</param>
         </member>
         <member name="T:Application.Helpers.IAesEncryptionHelper">
             <summary>
