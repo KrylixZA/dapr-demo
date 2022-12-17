@@ -1,0 +1,108 @@
+{
+	"info": {
+		"_postman_id": "caa0a160-2fc5-4bdc-a564-7990d4b61d97",
+		"name": "Order API v1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var uuid = require('uuid');",
+							"postman.setEnvironmentVariable('orderId', uuid.v4());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderId\": \"{{orderId}}\",\n    \"orderDateTime\": \"{{$isoTimestamp}}\",\n    \"items\": [\n        {\n            \"itemId\": \"{{$guid}}\",\n            \"name\": \"Peanut Butter\",\n            \"description\": \"Black Cat Super Smooth Peanut Butter 500g\",\n            \"cost\": 47.99\n        },\n        {\n            \"itemId\": \"{{$guid}}\",\n            \"name\": \"Honey\",\n            \"description\": \"Peels Honey 500g\",\n            \"cost\": 79.99\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ApiUrl}}/v1/orders",
+					"host": [
+						"{{ApiUrl}}"
+					],
+					"path": [
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Checkout Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{ApiUrl}}/v1/orders/checkout/{{orderId}}",
+					"host": [
+						"{{ApiUrl}}"
+					],
+					"path": [
+						"v1",
+						"orders",
+						"checkout",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Complete Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{ApiUrl}}/v1/orders/complete/{{orderId}}",
+					"host": [
+						"{{ApiUrl}}"
+					],
+					"path": [
+						"v1",
+						"orders",
+						"complete",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deactivate Order Actor",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{ApiUrl}}/v1/orders/deactivate/{{orderId}}",
+					"host": [
+						"{{ApiUrl}}"
+					],
+					"path": [
+						"v1",
+						"orders",
+						"deactivate",
+						"{{orderId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
