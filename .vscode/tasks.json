@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "docker-compose up",
+        "type": "docker-compose",
+        "dockerCompose": {
+          "up": {
+            "build": true
+          },
+          "files": [
+            "${workspaceFolder}/src/docker-compose.yml",
+            "${workspaceFolder}/src/docker-compose.override.yml"
+          ]
+        }
+      },
+      {
+        "label": "docker-compose down",
+        "type": "docker-compose",
+        "dockerCompose": {
+          "down": { },
+          "files": [
+            "${workspaceFolder}/src/docker-compose.yml",
+            "${workspaceFolder}/src/docker-compose.override.yml"
+          ]
+        }
+      }
+    ]
+  }
+  
