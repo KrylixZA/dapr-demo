@@ -50,35 +50,35 @@ services:
     networks:
     - dapr
 
-  garbagecollector:
-    image: garbagecollector:dev
-    build:
-      context: .
-      dockerfile: GarbageCollector/Dockerfile
-      tags:
-      - garbagecollector:dev
-    environment:
-    - ASPNETCORE_URLS=http://+:5000
-    depends_on:
-    - rabbitmq
-    networks:
-    - dapr
+  # garbagecollector:
+  #   image: garbagecollector:dev
+  #   build:
+  #     context: .
+  #     dockerfile: GarbageCollector/Dockerfile
+  #     tags:
+  #     - garbagecollector:dev
+  #   environment:
+  #   - ASPNETCORE_URLS=http://+:5000
+  #   depends_on:
+  #   - rabbitmq
+  #   networks:
+  #   - dapr
 
-  garbagecollector-dapr:
-    image: daprio/daprd
-    command: ["./daprd",
-      "--app-id", "garbagecollector",
-      "--app-port", "5000",
-      "--placement-host-address", "placement:50006",
-      "--components-path", "/components"]
-    volumes:
-    - ./dapr/components/:/components
-    depends_on:
-    - garbagecollector
-    - placement
-    network_mode: "service:garbagecollector"
-    networks:
-    - dapr
+  # garbagecollector-dapr:
+  #   image: daprio/daprd
+  #   command: ["./daprd",
+  #     "--app-id", "garbagecollector",
+  #     "--app-port", "5000",
+  #     "--placement-host-address", "placement:50006",
+  #     "--components-path", "/components"]
+  #   volumes:
+  #   - ./dapr/components/:/components
+  #   depends_on:
+  #   - garbagecollector
+  #   - placement
+  #   network_mode: "service:garbagecollector"
+  #   networks:
+  #   - dapr
 
 networks:
   dapr: null

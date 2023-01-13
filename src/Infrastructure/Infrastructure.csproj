@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>10</LangVersion>
+    <LangVersion>11</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UserSecretsId>4cc0f13e-ceba-4411-9878-fa36a81327c1</UserSecretsId>
   </PropertyGroup>
@@ -17,21 +17,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="XmlDocumentation\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="GarbageCollector\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Dapr.Actors" Version="1.9.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
     <PackageReference Include="Dapr.Client" Version="1.9.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
   </ItemGroup>
 </Project>

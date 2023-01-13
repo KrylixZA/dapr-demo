@@ -9,6 +9,9 @@ namespace GarbageCollector.Controllers;
 /// <summary>
 /// Exposes endpoints for interacting with order actor garbage collection.
 /// </summary>
+/// <remarks>
+/// This is not recommended. This only exists as a proof of concept as to what not to do!
+/// </remarks>
 [Route("v1/garbagecollector")]
 public class GarbageCollectorController : ControllerBase
 {
