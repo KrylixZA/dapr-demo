@@ -1,4 +1,5 @@
 # Contributing Guide
+
 Detailed below are a set of rules for contributing to this repository.
 
 1. Clone the repository at <https://github.com/KrylixZA/dapr-demo.git>
