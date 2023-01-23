@@ -6,7 +6,9 @@
         "type": "docker-compose",
         "dockerCompose": {
           "up": {
-            "build": true
+            "build": true,
+            "detached": true,
+            "customOptions": "--force-recreate"
           },
           "files": [
             "${workspaceFolder}/src/docker-compose.yml",
