@@ -48,7 +48,7 @@ public class OrderActor : Actor, IOrderActor
     await Task.WhenAll(
       _orderStateRepository.SaveOrderAsync(order),
       _orderPubSubRepository.PublishOrderEvent(order),
-      StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
+      StateManager.SetStateAsync(DaprComponents.StateStore, actorState));
 
     Logger.LogDebug("CreateOrderAsync end. OrderId: {orderId}", order.OrderId);
   }
@@ -69,7 +69,7 @@ public class OrderActor : Actor, IOrderActor
     await Task.WhenAll(
       _orderStateRepository.SaveOrderAsync(order),
       _orderPubSubRepository.PublishOrderEvent(order),
-      StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
+      StateManager.SetStateAsync(DaprComponents.StateStore, actorState));
 
     Logger.LogDebug("CheckoutOrderAsync end");
   }
@@ -90,7 +90,7 @@ public class OrderActor : Actor, IOrderActor
     await Task.WhenAll(
       _orderStateRepository.SaveOrderAsync(order),
       _orderPubSubRepository.PublishOrderEvent(order),
-      StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState));
+      StateManager.SetStateAsync(DaprComponents.StateStore, actorState));
 
     Logger.LogDebug("MarkOrderAsCompletedAsync end");
   }
@@ -101,13 +101,13 @@ public class OrderActor : Actor, IOrderActor
     Logger.LogDebug("DeactivateActorAsync start");
     var actorState = await GetActorStateAsync();
     actorState = OrderActorState.MarkActorStateAsDeactivated(actorState);
-    await StateManager.SetStateAsync(DaprComponents.OrderActorStateStore, actorState);
+    await StateManager.SetStateAsync(DaprComponents.StateStore, actorState);
     Logger.LogDebug("DeactivateActorAsync end");
   }
 
   private async Task<OrderActorState> GetActorStateAsync()
   {
-    var tryGetActorState = await StateManager.TryGetStateAsync<OrderActorState>(DaprComponents.OrderActorStateStore);
+    var tryGetActorState = await StateManager.TryGetStateAsync<OrderActorState>(DaprComponents.StateStore);
     if (!tryGetActorState.HasValue)
     {
       throw new OrderNotFoundException();

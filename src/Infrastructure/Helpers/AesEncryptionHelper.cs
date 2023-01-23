@@ -29,8 +29,8 @@ public class AesEncryptionHelper : IAesEncryptionHelper
   /// <inheritdoc />
   public async Task<string> EncryptObjectAsync<T>(T objectToEncrypt) where T : class
   {
-    var key = (await _daprClient.GetSecretAsync(DaprComponents.AesSecretStore, AesEncryptionKey))[AesEncryptionKey];
-    var vector = (await _daprClient.GetSecretAsync(DaprComponents.AesSecretStore, AesEncryptionVector))[AesEncryptionVector];
+    var key = (await _daprClient.GetSecretAsync(DaprComponents.Secrets, AesEncryptionKey))[AesEncryptionKey];
+    var vector = (await _daprClient.GetSecretAsync(DaprComponents.Secrets, AesEncryptionVector))[AesEncryptionVector];
 
     using var aes = Aes.Create();
     aes.Key = Convert.FromBase64String(key);
@@ -49,8 +49,8 @@ public class AesEncryptionHelper : IAesEncryptionHelper
   /// <inheritdoc />
   public async Task<T> DecryptToObjectAsync<T>(string stringToDecrypt) where T : class
   {
-    var key = (await _daprClient.GetSecretAsync(DaprComponents.AesSecretStore, AesEncryptionKey))[AesEncryptionKey];
-    var vector = (await _daprClient.GetSecretAsync(DaprComponents.AesSecretStore, AesEncryptionVector))[AesEncryptionVector];
+    var key = (await _daprClient.GetSecretAsync(DaprComponents.Secrets, AesEncryptionKey))[AesEncryptionKey];
+    var vector = (await _daprClient.GetSecretAsync(DaprComponents.Secrets, AesEncryptionVector))[AesEncryptionVector];
 
     using var aes = Aes.Create();
     aes.Key = Convert.FromBase64String(key);

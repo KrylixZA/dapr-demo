@@ -8,12 +8,7 @@ public static class DaprComponents
   /// <summary>
   /// The order state store component.
   /// </summary>
-  public const string OrderStateStore = "orders";
-
-  /// <summary>
-  /// The order actor state store component.
-  /// </summary>
-  public const string OrderActorStateStore = "orderactors";
+  public const string StateStore = "statestore";
 
   /// <summary>
   /// The pubsub component. 
@@ -23,5 +18,5 @@ public static class DaprComponents
   /// <summary>
   /// The component holding the AES secrets.
   /// </summary>
-  public const string AesSecretStore = "aes";
+  public const string Secrets = "secrets";
 }

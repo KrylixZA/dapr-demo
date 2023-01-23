@@ -24,7 +24,7 @@ public class OrderStateRepository : IOrderStateRepository
   public async Task SaveOrderAsync(Order order)
   {
     await _daprClient.SaveStateAsync(
-      DaprComponents.OrderStateStore,
+      DaprComponents.StateStore,
       order.OrderId.ToString(),
       order);
   }
@@ -33,7 +33,7 @@ public class OrderStateRepository : IOrderStateRepository
   public async Task<Order?> GetOrderAsync(Guid orderId)
   {
     return await _daprClient.GetStateAsync<Order?>(
-      DaprComponents.OrderStateStore,
+      DaprComponents.StateStore,
       orderId.ToString());
   }
 }
