@@ -32,6 +32,9 @@ public class OrderManager : IOrderManager
     _logger.LogDebug("CreateOrderAsync start. OrderId: {orderId}", order.OrderId);
     var actorId = new ActorId(order.OrderId.ToString());
     var orderActor = ActorProxy.Create<IOrderActor>(actorId, OrderActor.ActorType);
+
+    await orderActor.TestActorMethodAsync(order.OrderId);
+
     await orderActor.CreateOrderAsync(order);
     _logger.LogDebug("CreateOrderAsync end. OrderId: {orderId}", order.OrderId);
   }

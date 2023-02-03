@@ -8,6 +8,9 @@
             <summary>
             Exposes endpoints for interacting with order actor garbage collection.
             </summary>
+            <remarks>
+            This is not recommended. This only exists as a proof of concept as to what not to do!
+            </remarks>
         </member>
         <member name="M:GarbageCollector.Controllers.GarbageCollectorController.#ctor(GarbageCollector.Managers.IGarbageCollectorManager,Microsoft.Extensions.Logging.ILogger{GarbageCollector.Controllers.GarbageCollectorController})">
             <summary>

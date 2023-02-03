@@ -9,6 +9,12 @@ namespace OrderApi.Actors;
 public interface IOrderActor : IActor
 {
   /// <summary>
+  /// A test method to validate the issue with .NET 7 serialization lies with complex objects.
+  /// </summary>
+  /// <param name="orderId">The order identifier.</param>
+  Task TestActorMethodAsync(Guid orderId);
+
+  /// <summary>
   /// Creates an actor that represents the order.
   /// </summary>
   /// <param name="newOrder">The details of the order.</param>

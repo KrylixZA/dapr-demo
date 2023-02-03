@@ -13,14 +13,14 @@ public class Order
   /// The order unique identifier.
   /// </summary>
   [Required]
-  [MustNotBeDefault]
-  public Guid OrderId { get; set; } = default!;
+  //[MustNotBeDefault]
+  public Guid OrderId { get; set; }
 
   /// <summary>
   /// The UTC date and time when the order was made.
   /// </summary>
   [Required]
-  [MustNotBeDefault]
+  //[MustNotBeDefault]
   public DateTime OrderCreatedDateTimeUtc { get; set; } = DateTime.UtcNow;
 
   /// <summary>

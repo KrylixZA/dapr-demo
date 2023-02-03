@@ -78,6 +78,12 @@
             Defines a contract for representing an order 
             </summary>
         </member>
+        <member name="M:OrderApi.Actors.IOrderActor.TestActorMethodAsync(System.Guid)">
+            <summary>
+            A test method to validate the issue with .NET 7 serialization lies with complex objects.
+            </summary>
+            <param name="orderId">The order identifier.</param>
+        </member>
         <member name="M:OrderApi.Actors.IOrderActor.CreateOrderAsync(Domain.Models.Order)">
             <summary>
             Creates an actor that represents the order.
@@ -119,6 +125,9 @@
             <param name="host">The Dapr.Actors.Runtime.ActorHost that will host this actor instance.</param>
             <param name="orderStateRepository">The order state repository.</param>
             <param name="orderPubSubRepository">The order pub/sub repository.</param>
+        </member>
+        <member name="M:OrderApi.Actors.OrderActor.TestActorMethodAsync(System.Guid)">
+            <inheritdoc />
         </member>
         <member name="M:OrderApi.Actors.OrderActor.CreateOrderAsync(Domain.Models.Order)">
             <inheritdoc />

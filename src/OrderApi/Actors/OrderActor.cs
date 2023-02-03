@@ -4,7 +4,6 @@ using Domain.Constants;
 using Domain.Enums;
 using Domain.Exceptions;
 using Domain.Models;
-using Microsoft.Extensions.Logging;
 
 namespace OrderApi.Actors;
 
@@ -36,6 +35,13 @@ public class OrderActor : Actor, IOrderActor
   {
     _orderStateRepository = orderStateRepository;
     _orderPubSubRepository = orderPubSubRepository;
+  }
+
+  /// <inheritdoc />
+  public Task TestActorMethodAsync(Guid orderId)
+  {
+    Logger.LogDebug("TestActorMethod reached. OrderId: {orderId}", orderId);
+    return Task.CompletedTask;
   }
 
   /// <inheritdoc />
