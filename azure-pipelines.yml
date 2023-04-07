@@ -97,6 +97,8 @@ stages:
   jobs:
   - job: Deploy
     steps:
+    - checkout: none
+    
     - task: AzureContainerApps@0
       displayName: 'Deploy container app revision'
       inputs:
