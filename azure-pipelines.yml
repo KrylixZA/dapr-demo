@@ -74,6 +74,21 @@ stages:
           command: 'push'
           tags: '$(Build.BuildNumber)'
 
+      - task: Bash@3
+        displayName: 'Tag latest'
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+        inputs:
+          targetType: 'inline'
+          script: 'docker tag daprcontainerappsregistry12345.azurecr.io/dapr-demo/order-api:$(Build.BuildNumber) daprcontainerappsregistry12345.azurecr.io/dapr-demo/order-api:latest'
+
+      - task: Docker@2
+        displayName: 'Docker push latest'
+        inputs:
+          containerRegistry: 'Dapr Container Registry'
+          repository: 'dapr-demo/order-api'
+          command: 'push'
+          tags: 'latest'
+
 - stage: ContinuousDelivery
   displayName: 'Continuous Delivery'
   dependsOn: ContinuousIntegration
