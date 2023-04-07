@@ -73,3 +73,20 @@ stages:
           repository: 'dapr-demo/order-api'
           command: 'push'
           tags: '$(Build.BuildNumber)'
+
+- stage: ContinuousDelivery
+  displayName: 'Continuous Delivery'
+  dependsOn: ContinuousIntegration
+  pool:
+    vmImage: 'ubuntu-latest'
+  jobs:
+  - job: Deploy
+    steps:
+    - task: AzureContainerApps@0
+      inputs:
+        azureSubscription: 'Free Trial(85e5b8d9-d15f-4db3-bfaf-c97182b7cc0b)'
+        acrName: 'daprcontainerappsregistry12345'
+        containerAppName: 'dapr-demo-order-api'
+        resourceGroup: 'dapr-container-apps-environment'
+        imageToDeploy: 'daprcontainerappsregistry12345.azurecr.io/dapr-demo/order-api:$(Build.BuildNumber)'
+        
