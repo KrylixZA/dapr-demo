@@ -1,5 +1,7 @@
 # Dapr Demo
 
+[![Build Status](https://dev.azure.com/headleysj/Demos/_apis/build/status%2Fdapr-demo?branchName=main)](https://dev.azure.com/headleysj/Demos/_build/latest?definitionId=17&branchName=main)
+
 This is a basic demo application that processes orders within a system, leveraging Dapr components to do various things easily.
 
 ## Components used

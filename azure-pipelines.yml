@@ -83,6 +83,7 @@ stages:
   - job: Deploy
     steps:
     - task: AzureContainerApps@0
+      displayName: 'Deploy container app revision'
       inputs:
         azureSubscription: 'Free Trial(85e5b8d9-d15f-4db3-bfaf-c97182b7cc0b)'
         acrName: 'daprcontainerappsregistry12345'
