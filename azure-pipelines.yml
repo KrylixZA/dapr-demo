@@ -98,6 +98,7 @@ stages:
 
   - job: DeployOrderApi
     displayName: 'CD: Order API'
+    dependsOn: BuildOrderApi
     condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
     steps:
     - checkout: none
@@ -162,6 +163,7 @@ stages:
 
   - job: DeployGarbageCollector
     displayName: 'CD: Garbage Collector'
+    dependsOn: BuildOrderGarbageCollector
     condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
     steps:
     - checkout: none
