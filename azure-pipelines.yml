@@ -14,8 +14,8 @@ variables:
 name: $(MAJOR_VERSION).$(MINOR_VERSION).$(PATCH_VERSION).$(Rev:r)
 
 stages:
-- stage: ContinuousIntegration
-  displayName: 'Continuous Integration'
+- stage: SetBuildNumber
+  displayName: 'Set build number'
   pool:
     vmImage: 'ubuntu-latest'
   jobs:
@@ -47,9 +47,14 @@ stages:
             Write-Host "Package version: $buildVersion";
           }
 
+- stage: OrderApi
+  displayName: 'CI/CD: Order API'
+  dependsOn: SetBuildNumber
+  pool:
+    vmImage: 'ubuntu-latest'
+  jobs:
   - job: BuildOrderApi
-    displayName: 'Build Order API'
-    dependsOn: SetBuildNumber
+    displayName: 'CI: Order API'
     steps:
       - task: Docker@2
         displayName: 'Docker login'
@@ -91,9 +96,29 @@ stages:
           command: 'push'
           tags: 'latest'
 
+  - job: DeployOrderApi
+    displayName: 'CD: Order API'
+    condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
+    steps:
+    - checkout: none
+    
+    - task: AzureContainerApps@0
+      displayName: 'Deploy container app revision'
+      inputs:
+        azureSubscription: 'Free Trial(85e5b8d9-d15f-4db3-bfaf-c97182b7cc0b)'
+        acrName: 'daprcontainerappsregistry12345'
+        containerAppName: 'dapr-demo-order-api'
+        resourceGroup: 'dapr-container-apps-environment'
+        imageToDeploy: 'daprcontainerappsregistry12345.azurecr.io/dapr-demo/order-api:$(Build.BuildNumber)'
+
+- stage: GarbageCollector
+  displayName: 'CI/CD: Garbage Collector'
+  dependsOn: SetBuildNumber
+  pool:
+    vmImage: 'ubuntu-latest'
+  jobs:
   - job: BuildOrderGarbageCollector
-    displayName: 'Build Garbage Collector'
-    dependsOn: SetBuildNumber
+    displayName: 'CI: Garbage Collector'
     steps:
       - task: Docker@2
         displayName: 'Docker login'
@@ -135,15 +160,9 @@ stages:
           command: 'push'
           tags: 'latest'
 
-- stage: ContinuousDelivery
-  displayName: 'Continuous Delivery'
-  dependsOn: ContinuousIntegration
-  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
-  pool:
-    vmImage: 'ubuntu-latest'
-  jobs:
-  - job: DeployOrderApi
-    displayName: 'Deploy Order API'
+  - job: DeployGarbageCollector
+    displayName: 'CD: Garbage Collector'
+    condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
     steps:
     - checkout: none
     
@@ -152,21 +171,7 @@ stages:
       inputs:
         azureSubscription: 'Free Trial(85e5b8d9-d15f-4db3-bfaf-c97182b7cc0b)'
         acrName: 'daprcontainerappsregistry12345'
-        containerAppName: 'dapr-demo-order-api'
+        containerAppName: 'dapr-demo-garbage-collector'
         resourceGroup: 'dapr-container-apps-environment'
-        imageToDeploy: 'daprcontainerappsregistry12345.azurecr.io/dapr-demo/order-api:$(Build.BuildNumber)'
-
-  # - job: DeployGarbageCollector
-  #   displayName: 'Deploy Garbage Collector'
-  #   steps:
-  #   - checkout: none
-    
-  #   - task: AzureContainerApps@0
-  #     displayName: 'Deploy container app revision'
-  #     inputs:
-  #       azureSubscription: 'Free Trial(85e5b8d9-d15f-4db3-bfaf-c97182b7cc0b)'
-  #       acrName: 'daprcontainerappsregistry12345'
-  #       containerAppName: 'dapr-demo-garbage-collector'
-  #       resourceGroup: 'dapr-container-apps-environment'
-  #       imageToDeploy: 'daprcontainerappsregistry12345.azurecr.io/dapr-demo/garbage-collector:$(Build.BuildNumber)'
+        imageToDeploy: 'daprcontainerappsregistry12345.azurecr.io/dapr-demo/garbage-collector:$(Build.BuildNumber)'
         
