@@ -76,13 +76,14 @@ stages:
 
       - task: Bash@3
         displayName: 'Tag latest'
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+        condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
         inputs:
           targetType: 'inline'
           script: 'docker tag daprcontainerappsregistry12345.azurecr.io/dapr-demo/order-api:$(Build.BuildNumber) daprcontainerappsregistry12345.azurecr.io/dapr-demo/order-api:latest'
 
       - task: Docker@2
         displayName: 'Docker push latest'
+        condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
         inputs:
           containerRegistry: 'Dapr Container Registry'
           repository: 'dapr-demo/order-api'
@@ -92,6 +93,7 @@ stages:
 - stage: ContinuousDelivery
   displayName: 'Continuous Delivery'
   dependsOn: ContinuousIntegration
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
   pool:
     vmImage: 'ubuntu-latest'
   jobs:
