@@ -14,14 +14,18 @@
       "request": "launch",
       "type": "msedge",
       "url": "http://localhost:8000/swagger/index.html",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "docker-compose up",
+      "postDebugTask": "docker-compose down"
     },
     {
       "name": "Launch Chrome",
       "request": "launch",
       "type": "chrome",
       "url": "http://localhost:8000/swagger/index.html",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "docker-compose up",
+      "postDebugTask": "docker-compose down"
     }
   ]
 }

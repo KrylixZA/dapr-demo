@@ -47,7 +47,8 @@ stages:
             Write-Host "Package version: $buildVersion";
           }
 
-  - job: Build
+  - job: BuildOrderApi
+    displayName: 'Build Order API'
     dependsOn: SetBuildNumber
     steps:
       - task: Docker@2
@@ -90,6 +91,50 @@ stages:
           command: 'push'
           tags: 'latest'
 
+  - job: BuildOrderGarbageCollector
+    displayName: 'Build Garbage Collector'
+    dependsOn: SetBuildNumber
+    steps:
+      - task: Docker@2
+        displayName: 'Docker login'
+        inputs:
+          containerRegistry: 'Dapr Container Registry'
+          command: 'login'
+        
+      - task: Docker@2
+        displayName: 'Docker build'
+        inputs:
+          containerRegistry: 'Dapr Container Registry'
+          repository: 'dapr-demo/garbage-collector'
+          command: 'build'
+          Dockerfile: '$(Build.SourcesDirectory)/src/GarbageCollector/Dockerfile'
+          buildContext: '$(Build.SourcesDirectory)/src'
+          tags: '$(Build.BuildNumber)'
+
+      - task: Docker@2
+        displayName: 'Docker push'
+        inputs:
+          containerRegistry: 'Dapr Container Registry'
+          repository: 'dapr-demo/garbage-collector'
+          command: 'push'
+          tags: '$(Build.BuildNumber)'
+
+      - task: Bash@3
+        displayName: 'Tag latest'
+        condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
+        inputs:
+          targetType: 'inline'
+          script: 'docker tag daprcontainerappsregistry12345.azurecr.io/dapr-demo/garbage-collector:$(Build.BuildNumber) daprcontainerappsregistry12345.azurecr.io/dapr-demo/garbage-collector:latest'
+
+      - task: Docker@2
+        displayName: 'Docker push latest'
+        condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
+        inputs:
+          containerRegistry: 'Dapr Container Registry'
+          repository: 'dapr-demo/garbage-collector'
+          command: 'push'
+          tags: 'latest'
+
 - stage: ContinuousDelivery
   displayName: 'Continuous Delivery'
   dependsOn: ContinuousIntegration
@@ -97,7 +142,8 @@ stages:
   pool:
     vmImage: 'ubuntu-latest'
   jobs:
-  - job: Deploy
+  - job: DeployOrderApi
+    displayName: 'Deploy Order API'
     steps:
     - checkout: none
     
@@ -109,4 +155,18 @@ stages:
         containerAppName: 'dapr-demo-order-api'
         resourceGroup: 'dapr-container-apps-environment'
         imageToDeploy: 'daprcontainerappsregistry12345.azurecr.io/dapr-demo/order-api:$(Build.BuildNumber)'
+
+  # - job: DeployGarbageCollector
+  #   displayName: 'Deploy Garbage Collector'
+  #   steps:
+  #   - checkout: none
+    
+  #   - task: AzureContainerApps@0
+  #     displayName: 'Deploy container app revision'
+  #     inputs:
+  #       azureSubscription: 'Free Trial(85e5b8d9-d15f-4db3-bfaf-c97182b7cc0b)'
+  #       acrName: 'daprcontainerappsregistry12345'
+  #       containerAppName: 'dapr-demo-garbage-collector'
+  #       resourceGroup: 'dapr-container-apps-environment'
+  #       imageToDeploy: 'daprcontainerappsregistry12345.azurecr.io/dapr-demo/garbage-collector:$(Build.BuildNumber)'
         

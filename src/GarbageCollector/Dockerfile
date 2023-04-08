@@ -6,10 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["../GarbageCollector/GarbageCollector.csproj", "../GarbageCollector/"]
-RUN dotnet restore "../GarbageCollector/GarbageCollector.csproj"
+COPY ["GarbageCollector/GarbageCollector.csproj", "GarbageCollector/"]
+RUN dotnet restore "GarbageCollector/GarbageCollector.csproj"
 COPY . .
-WORKDIR "/src/../GarbageCollector"
+WORKDIR "/src/GarbageCollector"
 RUN dotnet build "GarbageCollector.csproj" -c Release -o /app/build
 
 FROM build AS publish
